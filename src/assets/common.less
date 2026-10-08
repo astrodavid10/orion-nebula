@@ -1,0 +1,168 @@
+@font-face {
+  font-family: "Highway Gothic Narrow";
+  src: url("./HighwayGothicNarrow.ttf");
+}
+
+.no-select {
+  -webkit-user-select: none; /* Safari */
+  -moz-user-select: none; /* Old versions of Firefox */
+  -ms-user-select: none; /* Internet Explorer/Edge */
+  user-select: none; /* Non-prefixed version, currently supported by Chrome, Edge, Opera and Firefox */
+}
+.pointer-events {
+  pointer-events: auto;
+}
+
+:root {
+  --default-font-size: clamp(0.7rem, min(1.7vh, 1.7vw), 1.1rem);
+  --default-line-height: clamp(1rem, min(2.2vh, 2.2vw), 1.6rem);
+}
+
+/* Overall page styling */
+html {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  background-color: #000;
+
+  overflow: hidden;
+  -ms-overflow-style: none;
+
+  /* We don't want a scrollbar for the overall canvas */
+  scrollbar-width: none;
+  ::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+body {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+
+  font-family: Verdana, Arial, Helvetica, sans-serif;
+}
+
+a {
+  text-decoration: none;
+  color: #aec2fd;
+  pointer-events: auto;
+
+  &:hover {
+    text-decoration: underline;
+  }
+
+  &[class^="share-network"]:hover {
+    text-decoration: none;
+    filter: brightness(75%);
+  }
+}
+
+/*
+  The main content of the mini.
+  The --app-content-height allows the app to shrink when the text is open
+ */
+#main-content {
+  position: fixed;
+  width: 100%;
+  height: var(--app-content-height);
+  overflow: hidden;
+
+  transition: height 0.1s ease-in-out;
+}
+
+#app {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  overflow: hidden;
+  font-size: 11pt;
+
+  .wwtelescope-component {
+    position: absolute;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    border-style: none;
+    border-width: 0;
+    margin: 0;
+    padding: 0;
+    transition: height .25s ease;
+    canvas {
+      background-color: black;
+    }
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .fade-enter-active,
+  .fade-leave-active {
+    transition: opacity 0.3s;
+  }
+}
+/* Vue 3 class names (-enter-from); the Vue 2 "-enter" never matched, so enter
+   transitions didn't start from opacity 0 (audit E14). */
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
+
+/* Visually hidden but available to screen readers. */
+.visually-hidden {
+  position: absolute !important;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+
+/* The modal loading window */
+.modal {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  width: 100%;
+  height: 100%;
+  z-index: 100;
+  color: #fff;
+  background-color: rgba(0, 0, 0, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#modal-loading {
+  background-color: #000;
+  .container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    .spinner {
+      background-image: url("./lunar_loader.gif");
+      background-repeat: no-repeat;
+      background-size: contain;
+      width: 3rem;
+      height: 3rem;
+    }
+    p {
+      margin: 0 0 0 1rem;
+      padding: 0;
+      font-size: 150%;
+    }
+  }
+}
+
+body.kiosk-mode {
+  overscroll-behavior: none;     /* kill pull-to-refresh / rubber-band */
+  -webkit-touch-callout: none;   /* kill long-press callout */
+  /* optional for touch-only installs: * { cursor: none !important; } */
+}

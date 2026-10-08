@@ -1,0 +1,209 @@
+<template>
+  <!-- Full-viewport backdrop. NOT teleported: nesting inside #app keeps the
+       --accent-color CSS custom property resolvable (see kiosk implementation
+       rule §1.2). Click outside the panel closes. -->
+  <div class="kiosk-qr-backdrop" @click.self="$emit('close')">
+    <div
+      class="kiosk-qr-panel"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="kiosk-qr-title"
+      :aria-describedby="typeUrl ? 'kiosk-qr-type' : 'kiosk-qr-url'"
+      @keydown.tab.prevent="trapFocus"
+    >
+      <h2 id="kiosk-qr-title" class="kiosk-qr-title">{{ displayTitle }}</h2>
+
+      <!-- The QR itself stays dark-on-light so phone cameras read it; the gold
+           theming goes AROUND the card, never inverting the modules. -->
+      <div class="kiosk-qr-card" role="img" :aria-label="`QR code linking to ${url}`">
+        <qrcode-vue
+          :value="url"
+          :size="232"
+          level="M"
+          :margin="1"
+          background="#fdf8ef"
+          foreground="#140d02"
+        />
+      </div>
+
+      <p class="kiosk-qr-caption">Scan with your phone's camera</p>
+      <!-- A short address a visitor can type instead (the QR keeps the full
+           link, including the image they were looking at). -->
+      <p v-if="typeUrl" id="kiosk-qr-type" class="kiosk-qr-type">
+        or type <strong>{{ typeHost }}<wbr>{{ typePath }}</strong>
+      </p>
+      <p v-else id="kiosk-qr-url" class="kiosk-qr-url">{{ truncatedUrl }}</p>
+
+      <button ref="closeBtn" type="button" class="kiosk-qr-close control-btn-like" @click="$emit('close')">
+        Close
+      </button>
+    </div>
+  </div>
+</template>
+
+<script lang="ts">
+import { defineComponent } from "vue";
+import QrcodeVue from "qrcode.vue";
+
+// Middle-truncate the shown URL past this length (the QR encodes the full URL
+// regardless — this is display only).
+const URL_DISPLAY_MAX = 48;
+
+export default defineComponent({
+  name: "KioskQrModal",
+  components: { "qrcode-vue": QrcodeVue },
+  props: {
+    url: { type: String, required: true },
+    title: { type: String, default: "" },
+    // Optional short, typeable address shown instead of the encoded URL.
+    typeUrl: { type: String, default: "" },
+    autoCloseMs: { type: Number, default: 45000 },
+  },
+  emits: ["close"],
+  data() {
+    return {
+      autoCloseTimer: 0,
+      // Focus returns here when the modal closes (audit J14).
+      returnFocusTo: null as HTMLElement | null,
+    };
+  },
+  computed: {
+    // The typeable address splits at its first "/" so a line break (if it
+    // needs one) falls there, never mid-word.
+    typeHost(): string {
+      const i = this.typeUrl.indexOf("/");
+      return i < 0 ? this.typeUrl : this.typeUrl.slice(0, i);
+    },
+    typePath(): string {
+      const i = this.typeUrl.indexOf("/");
+      return i < 0 ? "" : this.typeUrl.slice(i);
+    },
+    displayTitle(): string {
+      return this.title || "Scan to visit";
+    },
+    // e.g. "https://webbtele…scope.org/page" — keep the head (so the domain is
+    // legible) and the tail (so the path is), drop the middle.
+    truncatedUrl(): string {
+      const u = this.url;
+      if (u.length <= URL_DISPLAY_MAX) { return u; }
+      const head = u.slice(0, 30);
+      const tail = u.slice(-15);
+      return `${head}…${tail}`;
+    },
+  },
+  mounted() {
+    this.returnFocusTo = document.activeElement as HTMLElement | null;
+    (this.$refs.closeBtn as HTMLElement | undefined)?.focus();
+    if (this.autoCloseMs > 0) {
+      this.autoCloseTimer = window.setTimeout(() => this.$emit("close"), this.autoCloseMs);
+    }
+  },
+  beforeUnmount() {
+    window.clearTimeout(this.autoCloseTimer);
+    this.returnFocusTo?.focus?.();
+  },
+  methods: {
+    // The Close button is the dialog's only focusable control, so Tab and
+    // Shift+Tab simply keep focus on it.
+    trapFocus(): void {
+      (this.$refs.closeBtn as HTMLElement | undefined)?.focus();
+    },
+  },
+});
+</script>
+
+<style scoped>
+.kiosk-qr-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 70;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.65);
+  backdrop-filter: blur(3px);
+  -webkit-backdrop-filter: blur(3px);
+}
+
+.kiosk-qr-panel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+  max-width: min(92vw, 22rem);
+  padding: 1.4rem 1.6rem 1.5rem;
+  background: rgba(4, 6, 24, 0.94);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  border: 1px solid var(--accent-color);
+  border-radius: 14px;
+  box-shadow: 0 0 24px rgba(0, 0, 0, 0.6);
+}
+
+.kiosk-qr-title {
+  margin: 0;
+  color: var(--accent-color);
+  font-size: 1.15rem;
+  font-weight: 700;
+  text-align: center;
+}
+
+.kiosk-qr-card {
+  background: #fdf8ef;
+  border-radius: 12px;
+  padding: 16px;
+  line-height: 0;
+  border: 1px solid var(--accent-color);
+  box-shadow: 0 0 8px var(--accent-color);
+}
+
+.kiosk-qr-url {
+  margin: 0;
+  max-width: 100%;
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 0.75rem;
+  word-break: break-all;
+  text-align: center;
+}
+
+.kiosk-qr-type {
+  margin: 0;
+  color: rgba(255, 255, 255, 0.85);
+  font-size: 0.9rem;
+  text-align: center;
+
+  strong {
+    display: block;
+    margin-top: 0.2rem;
+    color: #fff;
+    font-size: 1.15rem;
+    letter-spacing: 0.01em;
+    overflow-wrap: anywhere;
+  }
+}
+
+.kiosk-qr-caption {
+  margin: 0;
+  color: rgba(255, 255, 255, 0.85);
+  font-size: 0.85rem;
+  text-align: center;
+}
+
+/* Matches the app's .control-btn look: dark fill, gold border, gold text. */
+.control-btn-like {
+  margin-top: 0.3rem;
+  padding: 0.5rem 1.4rem;
+  border-radius: 8px;
+  background: rgba(4, 6, 24, 0.82);
+  border: 1px solid var(--accent-color);
+  color: var(--accent-color);
+  cursor: pointer;
+  font-size: 0.95rem;
+  font-weight: 600;
+  transition: box-shadow 150ms ease, color 150ms ease;
+}
+.control-btn-like:hover {
+  color: var(--accent-color2);
+  box-shadow: 0 0 8px var(--accent-color);
+}
+</style>

@@ -1,81 +1,122 @@
-import Vue, { createApp } from "vue";
+import { createApp, defineAsyncComponent } from "vue";
 
-import LayeredImagery from "./MainContent.vue";
-import FolderView from "./FolderView.vue";
+import OrionViewer from "./orion-viewer.vue";
+import ImageGallery from "./ImageGallery.vue";
 import TransitionExpand from "./TransitionExpand.vue";
-
-import VueSlider from "vue-slider-component";
-import 'vue-slider-component/theme/default.css';
-
-import Datepicker from '@vuepic/vue-datepicker';
-import '@vuepic/vue-datepicker/dist/main.css';
+import { tip as tipDirective } from "./tooltip";
+import { boolParam } from "./urlParams";
+import "./assets/common.less";
 
 import vuetify from "../plugins/vuetify";
 
-import './assets/Roboto.ttf';
-import './assets/RobotoCondensed.ttf';
+import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
 import { WWTComponent, wwtPinia } from "@wwtelescope/engine-pinia";
 
-import Notifications from '@kyvg/vue3-notification';
+import { library } from "@fortawesome/fontawesome-svg-core";
+import {
+  faBookOpen,
+  faTimes,
+  faChevronDown,
+  faChevronUp,
+  faChevronLeft,
+  faChevronRight,
+  faGear,
+  faAdjust,
+  faStar,
+  faInfoCircle,
+  faExpand,
+  faCompress,
+  faSlidersH,
+  faRocket,
+  faGlobe,
+  // Badge / filter-chip icons (see src/layerTypes.ts) and shared UI icons.
+  faStarOfLife,
+  faCompactDisc,
+  faCloud,
+  faCircleDot,
+  faBurst,
+  faBraille,
+  faHurricane,
+  faCircleNodes,
+  faLayerGroup,
+  faBolt,
+  faTableCells,
+  faFilter,
+  faRing,
+  faArrowsAlt,
+  faCheck,
+  faImage,
+  faMagnifyingGlass,
+  // Menu, tour, compare and share controls (one icon per action).
+  faRoute,
+  faPanorama,
+  faVectorSquare,
+  faBuildingColumns,
+  faSatellite,
+  faArrowUpRightFromSquare,
+  faTableColumns,
+  faShareNodes,
+  faRightLeft,
+  faTriangleExclamation,
+  // Orion: layer badges and publication links.
+  faNewspaper,
+  faSatelliteDish,
+  faMountain,
+  faCamera,
+} from "@fortawesome/free-solid-svg-icons";
 
-import "leaflet/dist/leaflet.css";
+// Canonical public URL of the deployed site, set at build time
+// (VUE_APP_PUBLIC_URL in .env.production.local or the CI environment). The
+// kiosk's take-home QR encodes it; when it's empty the QR falls back to the
+// current URL, which is wrong for a kiosk served from localhost or a LAN, and
+// kiosk mode shows a staff warning (audit J2).
+const PUBLIC_URL = process.env.VUE_APP_PUBLIC_URL ?? "";
 
-/** v-hide directive taken from https://www.ryansouthgate.com/2020/01/30/vue-js-v-hide-element-whilst-keeping-occupied-space/ */
-// Extract the function out, up here, so I'm not writing it twice
-const update = (el: HTMLElement, binding: Vue.DirectiveBinding) => el.style.visibility = (binding.value) ? "hidden" : "";
+// ?kioskStats=1 → mount the standalone usage-stats panel instead of the WWT
+// viewer (no engine/pinia/vuetify/FontAwesome boot needed). See kioskStats.ts.
+// Loaded as a separate chunk so ordinary visitors never download it (J23).
+if (boolParam("kioskStats")) {
+  createApp(defineAsyncComponent(() => import("./KioskStatsPanel.vue"))).mount("#app");
+} else {
+  library.add(
+    faBookOpen, faTimes, faChevronDown, faChevronUp, faChevronLeft, faChevronRight,
+    faGear, faAdjust, faStar, faInfoCircle, faExpand, faCompress, faSlidersH, faRocket, faGlobe,
+    faStarOfLife, faCompactDisc, faCloud, faCircleDot, faBurst, faBraille, faHurricane,
+    faCircleNodes, faLayerGroup, faBolt, faTableCells, faFilter, faRing, faArrowsAlt, faCheck,
+    faImage, faMagnifyingGlass,
+    faRoute, faPanorama, faVectorSquare, faBuildingColumns, faSatellite, faArrowUpRightFromSquare,
+    faTableColumns, faShareNodes, faRightLeft, faTriangleExclamation,
+    faNewspaper, faSatelliteDish, faMountain, faCamera,
+  );
 
-createApp(LayeredImagery, {
-  wwtNamespace: "wwt-minids-layeredimagery",
-  wtml: { // images are listed in chronological order earliest to latest
-    layeredimagery: "http://data1.wwtassets.org/packages/2023/10_jwst/OrionNebula_v10.wtml",
-  },
-  url: "https://web.wwtassets.org/specials/2023/orion/",
-  thumbnailUrl: "https://cdn.worldwidetelescope.org/thumbnails/jwst.jpg",
-  bgWtml: "https://data1.wwtassets.org/packages/2023/04_casA/StudyBackgroundImagery.wtml",
-  fgName: "unWISE",
-  bgName: "Digitized Sky Survey",
-  title: "ORION NEBULA",
-  introTitle: "Interactively Explore Orion Nebula Imagery!",
-  introText: `The Orion Nebula is one of the most scrutinized and photographed objects in the 
-  night sky and is among the most intensely studied celestial features. This nebula has revealed 
-  much about the process of how stars and planetary systems are formed from collapsing clouds 
-  of gas and dust. Astronomers have directly observed protoplanetary disks and brown dwarfs within 
-  the nebula, intense and turbulent motions of the gas, and the photo-ionizing effects of massive 
-  nearby stars in the nebula.`,
-  introInstructions: `Pan and zoom to explore the images. 
-  Select the thumbnails to view Orion Nebula astro-imagery 
-  in context of the sky. Using the menu (top right), change the background imagery to compare 
-  against different surveys and wavelengths.`
-})
+  createApp(OrionViewer, {
+    wwtNamespace: "wwt-orion-nebula",
+    // OrionNebula_v10.wtml (2023), bundled with every URL upgraded to https
+    // (audit O5). public/orion.wtml.
+    wtml: "orion.wtml",
+    bgWtml: "https://data1.wwtassets.org/packages/2023/06_pas/BackgroundImagery_v2.wtml",
+    bgName: "unWISE color, from W2 and W1 bands",
+    introTitle: "Explore the Orion Nebula",
+    // The 2023 app opened on this layer (FolderView items[4]).
+    startImage: "JWST - NIRCam Short-wavelength",
+    kioskMode: boolParam("kiosk"),
+    kioskHomeUrl: PUBLIC_URL,
+  })
 
-  // Plugins
-  .use(wwtPinia)
-  .use(vuetify)
-  .use(Notifications)
+    // Plugins
+    .use(wwtPinia)
+    .use(vuetify)
 
-  // Directives
-  .directive(
-    /**
-    * Hides an HTML element, keeping the space it would have used if it were visible (css: Visibility)
-    */
-    "hide", {
-      // Run on initialisation (first render) of the directive on the element
-      beforeMount(el, binding, _vnode, _prevVnode) {
-        update(el, binding);
-      },
-      // Run on subsequent updates to the value supplied to the directive
-      updated(el, binding, _vnode, _prevVnode) {
-        update(el, binding);
-      }
-    })
+    // Themed replacement for native `title` tooltips (see src/tooltip.ts).
+    .directive("tip", tipDirective)
 
-  // Components
-  .component("WorldWideTelescope", WWTComponent)
+    // Components
+    .component("WorldWideTelescope", WWTComponent)
+    .component("font-awesome-icon", FontAwesomeIcon)
+    .component("transition-expand", TransitionExpand)
+    .component("image-gallery", ImageGallery)
 
-  .component('folder-view', FolderView)
-  .component('vue-slider', VueSlider)
-  .component('date-picker', Datepicker)
-
-  // Mount
-  .mount("#app");
+    // Mount
+    .mount("#app");
+}
