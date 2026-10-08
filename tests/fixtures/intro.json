@@ -1,0 +1,17 @@
+{
+ "title": "ORION NEBULA",
+ "introTitle": "Interactively Explore Orion Nebula Imagery!",
+ "introText": "The Orion Nebula is one of the most scrutinized and photographed objects in the night sky and is among the most intensely studied celestial features. This nebula has revealed much about the process of how stars and planetary systems are formed from collapsing clouds of gas and dust. Astronomers have directly observed protoplanetary disks and brown dwarfs within the nebula, intense and turbulent motions of the gas, and the photo-ionizing effects of massive nearby stars in the nebula.",
+ "introInstructions": "Pan and zoom to explore the images. Select the thumbnails to view Orion Nebula astro-imagery in context of the sky. Using the menu (top right), change the background imagery to compare against different surveys and wavelengths.",
+ "fgName": "unWISE",
+ "bgName": "Digitized Sky Survey",
+ "bgWtml": "https://data1.wwtassets.org/packages/2023/04_casA/StudyBackgroundImagery.wtml",
+ "wtml": "https://data1.wwtassets.org/packages/2023/10_jwst/OrionNebula_v10.wtml",
+ "startPlaceIndex": 4,
+ "credits": [
+  "A. David Weigel",
+  "Érika Silva",
+  "Peter K. G. Williams",
+  "Jon Carifio"
+ ]
+}
