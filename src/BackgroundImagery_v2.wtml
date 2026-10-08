@@ -1,0 +1,112 @@
+<?xml version="1.0"?>
+<Folder MSRCommunityId="0" MSRComponentId="0" Permission="0" Name="StudyBackgroundImagery_v2" Group="Explorer" Searchable="False" Type="Earth">
+  <VersionDependent>false</VersionDependent>
+  <Place MSRCommunityId="0" MSRComponentId="0" Permission="0" Name="RASS: ROSAT All Sky Survey (X-ray)" DataSetType="Sky" RA="0" Dec="0" Constellation="" Classification="Unidentified" Magnitude="0" Distance="0" ZoomLevel="360" Rotation="0" Angle="0" DomeAlt="0" DomeAz="0" Opacity="100" AngularSize="360">
+    <Target>Custom</Target>
+    <ForegroundImageSet>
+      <ImageSet MSRCommunityId="0" MSRComponentId="0" Permission="0" Generic="False" DataSetType="Sky" BandPass="XRay" Url="http://r{S:2}.ortho.tiles.virtualearth.net/tiles/wts0000001132{Q}?g=182" TileLevels="7" WidthFactor="2" Sparse="False" Rotation="0" QuadTreeMap="0123" Projection="Toast" Name="RASS: ROSAT All Sky Survey (X-ray)" FileType=".png" CenterY="0" CenterX="0" BottomsUp="False" StockSet="False" ElevationModel="False" OffsetX="0" OffsetY="0" BaseTileLevel="0" BaseDegreesPerTile="180" ReferenceFrame="Sky" MeanRadius="0">
+        <Credits>This is a composite of three RASS3 surveys from the ROSAT Data Archive of the Max-Planck-Institut fur extraterrestrische Physik (MPE) at Garching, Germany. TOAST-formatted data was obtained from NASA's SkyView Virtual Telescope. Red is soft band (RASS3sb), Green is broad band (RASS3bb), Blue is hard band (RASS3hb)</Credits>
+        <CreditsUrl>http://www.xray.mpe.mpg.de/cgi-bin/rosat/rosat-survey</CreditsUrl>
+        <ThumbnailUrl>http://www.worldwidetelescope.org/wwtweb/thumbnail.aspx?name=rosatcolor</ThumbnailUrl>
+      </ImageSet>
+    </ForegroundImageSet>
+  </Place>
+  <Place MSRCommunityId="0" MSRComponentId="0" Permission="0" Name="Fermi LAT 8-year (gamma)" DataSetType="Sky" RA="0" Dec="0" Constellation="" Classification="Unidentified" Magnitude="0" Distance="0" ZoomLevel="360" Rotation="0" Angle="0" DomeAlt="0" DomeAz="0" Opacity="100" AngularSize="360">
+    <Target>Custom</Target>
+    <ForegroundImageSet>
+      <ImageSet MSRCommunityId="0" MSRComponentId="0" Permission="0" Generic="False" DataSetType="Sky" BandPass="Gamma" Url="http://wwtfiles.blob.core.windows.net/fermilatyear8/Fermi%20LAT%208-yearL{1}X{2}Y{3}.png" TileLevels="6" WidthFactor="2" Sparse="False" Rotation="0" QuadTreeMap="" Projection="Toast" Name="Fermi LAT 8-year (gamma)" FileType=".png" CenterY="0" CenterX="0" BottomsUp="False" StockSet="False" ElevationModel="False" OffsetX="0" OffsetY="0" BaseTileLevel="0" BaseDegreesPerTile="180" MeanRadius="0">
+        <Credits>Gamma-ray intensity map (photons cm^-2 s-1 sr^-1, &gt;1 GeV) =&gt;1000 MeV Credit: NASA and FERMI-LAT Team.</Credits>
+        <CreditsUrl>https://www.nasa.gov/content/fermi-gamma-ray-space-telescope</CreditsUrl>
+        <ThumbnailUrl>http://www.worldwidetelescope.org/wwtweb/thumbnail.aspx?name=fermi_lat_8_year</ThumbnailUrl>
+      </ImageSet>
+    </ForegroundImageSet>
+  </Place>
+  <Place MSRCommunityId="0" MSRComponentId="0" Permission="0" Name="GALEX (Ultraviolet)" DataSetType="Sky" RA="0" Dec="0" Constellation="" Classification="Unidentified" Magnitude="0" Distance="0" ZoomLevel="360" Rotation="0" Angle="0" DomeAlt="0" DomeAz="0" Opacity="100" AngularSize="360">
+    <Target>Custom</Target>
+    <ForegroundImageSet>
+      <ImageSet MSRCommunityId="0" MSRComponentId="0" Permission="0" Generic="False" DataSetType="Sky" BandPass="Ultraviolet" Url="http://www.worldwidetelescope.org/wwtweb/galexTOAST.aspx?q={1},{2},{3}" TileLevels="10" WidthFactor="2" Sparse="False" Rotation="0" QuadTreeMap="0123" Projection="Toast" Name="GALEX (Ultraviolet)" FileType=".png" CenterY="0" CenterX="0" BottomsUp="False" StockSet="False" ElevationModel="False" OffsetX="0" OffsetY="0" BaseTileLevel="0" BaseDegreesPerTile="180" ReferenceFrame="Sky" MeanRadius="0">
+        <Credits>Space Telescope Science Institute. TOAST-formatted data was obtained from NASA's SkyView Virtual Telescope. The Galaxy Explorer instrument allows observations to be made in ultraviolet bands Far UV 1350-1780A and Near UV 1770-2730A. This is the GR2/3 release. </Credits>
+        <CreditsUrl>http://galex.stsci.edu/GR2/</CreditsUrl>
+        <ThumbnailUrl>http://www.worldwidetelescope.org/wwtweb/thumbnail.aspx?name=galexboth</ThumbnailUrl>
+      </ImageSet>
+    </ForegroundImageSet>
+  </Place>
+  <Place MSRCommunityId="0" MSRComponentId="0" Permission="0" Name="Deep Star Maps 2020" DataSetType="Sky" RA="0" Dec="0" Constellation="" Classification="Unidentified" Magnitude="0" Distance="0" ZoomLevel="360" Rotation="0" Angle="0" DomeAlt="0" DomeAz="0" Opacity="100" AngularSize="360">
+    <Target>Custom</Target>
+    <ForegroundImageSet>
+      <ImageSet MSRCommunityId="0" MSRComponentId="0" Permission="0" Generic="False" DataSetType="Sky" BandPass="Visible" Url="http://data1.wwtassets.org/packages/2020/10_dsm2020/{1}/{3}/{3}_{2}.png" TileLevels="8" WidthFactor="2" Sparse="True" Rotation="0" QuadTreeMap="" Projection="Toast" Name="Deep Star Maps 2020" FileType=".png" CenterY="0" CenterX="0" BottomsUp="False" StockSet="False" ElevationModel="False" OffsetX="0" OffsetY="0" BaseTileLevel="0" BaseDegreesPerTile="180" MeanRadius="0">
+        <Credits>Ernie Wright, Laurence Schuler, Ian Jones; NASA/Goddard Space Flight Center Scientific Visualization Studio; Gaia team/ESA</Credits>
+        <ThumbnailUrl>http://data1.wwtassets.org/packages/2020/10_dsm2020/thumb.jpg</ThumbnailUrl>
+      </ImageSet>
+    </ForegroundImageSet>
+  </Place>
+  <Place MSRCommunityId="0" MSRComponentId="0" Permission="0" Name="Gaia DR2" DataSetType="Sky" RA="0" Dec="0" Constellation="" Classification="Unidentified" Magnitude="0" Distance="0" ZoomLevel="360" Rotation="0" Angle="0" DomeAlt="0" DomeAz="0" Opacity="100" AngularSize="360">
+    <Target>Custom</Target>
+    <ForegroundImageSet>
+      <ImageSet MSRCommunityId="0" MSRComponentId="0" Permission="0" Generic="False" DataSetType="Sky" BandPass="Visible" Url="http://data1.wwtassets.org/packages/2020/09_gaia_dr2/{1}/{3}/{3}_{2}.png" TileLevels="8" WidthFactor="2" Sparse="True" Rotation="72" QuadTreeMap="" Projection="Toast" Name="Gaia DR2" FileType=".png" CenterY="0" CenterX="0" BottomsUp="False" StockSet="False" ElevationModel="False" OffsetX="0" OffsetY="0" BaseTileLevel="0" BaseDegreesPerTile="180" MeanRadius="0">
+        <Credits>Gaia Data Processing and Analysis Consortium (DPAC); A. Moitinho / A. F. Silva / M. Barros / C. Barata, University of Lisbon, Portugal; H. Savietto, Fork Research, Portugal</Credits>
+        <CreditsUrl>https://sci.esa.int/web/gaia/-/60196-gaia-s-sky-in-colour-equirectangular-projection</CreditsUrl>
+        <ThumbnailUrl>http://data1.wwtassets.org/packages/2020/09_gaia_dr2/thumb.jpg</ThumbnailUrl>
+      </ImageSet>
+    </ForegroundImageSet>
+  </Place>
+  <Place MSRCommunityId="0" MSRComponentId="0" Permission="0" Name="USNOB: US Naval Observatory B 1.0 (Synthetic, Optical)" DataSetType="Sky" RA="0" Dec="0" Constellation="" Classification="Unidentified" Magnitude="0" Distance="0" ZoomLevel="360" Rotation="0" Angle="0" DomeAlt="0" DomeAz="0" Opacity="100" AngularSize="360">
+    <Target>Custom</Target>
+    <ForegroundImageSet>
+      <ImageSet MSRCommunityId="0" MSRComponentId="0" Permission="0" Generic="False" DataSetType="Sky" BandPass="Visible" Url="http://r{S:0}.ortho.tiles.virtualearth.net/tiles/wts0000001210{Q}?g=182" TileLevels="6" WidthFactor="2" Sparse="False" Rotation="0" QuadTreeMap="0123" Projection="Toast" Name="USNOB: US Naval Observatory B 1.0 (Synthetic, Optical)" FileType=".png" CenterY="0" CenterX="0" BottomsUp="False" StockSet="False" ElevationModel="False" OffsetX="0" OffsetY="0" BaseTileLevel="0" BaseDegreesPerTile="180" ReferenceFrame="Sky" MeanRadius="0">
+        <Credits>Monet D.G., Levine S.E., Casian B., et al. Astron. J., 125, 984 (2003). Rendering by Jina Suh (Microsoft).</Credits>
+        <CreditsUrl>http://cdsarc.u-strasbg.fr/viz-bin/Cat?I/284</CreditsUrl>
+        <ThumbnailUrl>http://www.worldwidetelescope.org/wwtweb/thumbnail.aspx?name=usnob</ThumbnailUrl>
+      </ImageSet>
+    </ForegroundImageSet>
+  </Place>
+  <Place MSRCommunityId="0" MSRComponentId="0" Permission="0" Name="Digitized Sky Survey (Color)" DataSetType="Sky" RA="0" Dec="0" Constellation="" Classification="Unidentified" Magnitude="0" Distance="0" ZoomLevel="360" Rotation="0" Angle="0" DomeAlt="0" DomeAz="0" Opacity="100" AngularSize="360">
+    <Target>Custom</Target>
+    <ForegroundImageSet>
+      <ImageSet MSRCommunityId="0" MSRComponentId="0" Permission="0" Generic="False" DataSetType="Sky" BandPass="Visible" Url="http://cdn.worldwidetelescope.org/wwtweb/dss.aspx?q={1},{2},{3}" TileLevels="12" WidthFactor="2" Sparse="False" Rotation="0" QuadTreeMap="0123" Projection="Toast" Name="Digitized Sky Survey (Color)" FileType=".png" CenterY="0" CenterX="0" BottomsUp="False" StockSet="True" ElevationModel="False" OffsetX="0" OffsetY="0" BaseTileLevel="0" BaseDegreesPerTile="180" ReferenceFrame="Sky" MeanRadius="0">
+        <Credits>Copyright DSS Consortium. These data are from the DSS2 survey.</Credits>
+        <CreditsUrl>http://gsss.stsci.edu/Acknowledgements/DataCopyrights.htm</CreditsUrl>
+        <ThumbnailUrl>http://www.worldwidetelescope.org/thumbnails/DSS.png</ThumbnailUrl>
+      </ImageSet>
+    </ForegroundImageSet>
+  </Place>
+  <Place MSRCommunityId="0" MSRComponentId="0" Permission="0" Name="2Mass: Imagery (Infrared)" DataSetType="Sky" RA="0" Dec="0" Constellation="" Classification="Unidentified" Magnitude="0" Distance="0" ZoomLevel="360" Rotation="0" Angle="0" DomeAlt="0" DomeAz="0" Opacity="100" AngularSize="360">
+    <Target>Custom</Target>
+    <ForegroundImageSet>
+      <ImageSet MSRCommunityId="0" MSRComponentId="0" Permission="0" Generic="False" DataSetType="Sky" BandPass="IR" Url="http://www.worldwidetelescope.org/wwtweb/TwoMassToast.aspx?q={1},{2},{3}" TileLevels="8" WidthFactor="2" Sparse="False" Rotation="0" QuadTreeMap="0123" Projection="Toast" Name="2Mass: Imagery (Infrared)" FileType=".png" CenterY="0" CenterX="0" BottomsUp="False" StockSet="False" ElevationModel="False" OffsetX="0" OffsetY="0" BaseTileLevel="0" BaseDegreesPerTile="180" ReferenceFrame="Sky" MeanRadius="0">
+        <Credits>This publication makes use of data products from the Two Micron All Sky Survey, which is a joint project of the University of Massachusetts and the Infrared Processing and Analysis Center/California Institute of Technology, funded by the National Aeronautics and Space Administration and the National Science Foundation.</Credits>
+        <CreditsUrl>http://www.ipac.caltech.edu/2mass/</CreditsUrl>
+        <ThumbnailUrl>http://www.worldwidetelescope.org/wwtweb/thumbnail.aspx?name=2mass</ThumbnailUrl>
+      </ImageSet>
+    </ForegroundImageSet>
+  </Place>
+  <Place MSRCommunityId="0" MSRComponentId="0" Permission="0" Name="SFD Dust Map (Infrared)" DataSetType="Sky" RA="0" Dec="0" Constellation="" Classification="Unidentified" Magnitude="0" Distance="0" ZoomLevel="360" Rotation="0" Angle="0" DomeAlt="0" DomeAz="0" Opacity="100" AngularSize="360">
+    <Target>Custom</Target>
+    <ForegroundImageSet>
+      <ImageSet MSRCommunityId="0" MSRComponentId="0" Permission="0" Generic="False" DataSetType="Sky" BandPass="IR" Url="http://www.worldwidetelescope.org/wwtweb/tiles.aspx?q={1},{2},{3},dust" TileLevels="6" WidthFactor="2" Sparse="False" Rotation="0" QuadTreeMap="" Projection="Toast" Name="SFD Dust Map (Infrared)" FileType=".png" CenterY="0" CenterX="0" BottomsUp="False" StockSet="False" ElevationModel="False" OffsetX="0" OffsetY="0" BaseTileLevel="0" BaseDegreesPerTile="180" ReferenceFrame="Sky" MeanRadius="0">
+        <Credits>Data provided by two NASA satellites, the  Infrared Astronomy Satellite (IRAS) and the Cosmic Background Explorer (COBE). Processing by David J. Schlegel, Douglas P. Finkbeiner and Marc Davis, Princeton University and University of California, Berkeley.</Credits>
+        <CreditsUrl>http://astro.berkeley.edu/~marc/dust/</CreditsUrl>
+        <ThumbnailUrl>http://www.worldwidetelescope.org/wwtweb/thumbnail.aspx?name=dust</ThumbnailUrl>
+      </ImageSet>
+    </ForegroundImageSet>
+  </Place>
+  <Place MSRCommunityId="0" MSRComponentId="0" Permission="0" Name="WISE All Sky (Infrared)" DataSetType="Sky" RA="0" Dec="0" Constellation="" Classification="Unidentified" Magnitude="0" Distance="0" ZoomLevel="360" Rotation="0" Angle="0" DomeAlt="0" DomeAz="0" Opacity="100" AngularSize="360">
+    <Target>Custom</Target>
+    <ForegroundImageSet>
+      <ImageSet MSRCommunityId="0" MSRComponentId="0" Permission="0" Generic="False" DataSetType="Sky" BandPass="IR" Url="http://www.worldwidetelescope.org/wwtweb/tiles.aspx?q={L},{X},{Y},wise" TileLevels="7" WidthFactor="2" Sparse="False" Rotation="0" QuadTreeMap="" Projection="Toast" Name="WISE All Sky (Infrared)" FileType=".png" CenterY="0" CenterX="0" BottomsUp="False" StockSet="False" ElevationModel="False" OffsetX="0" OffsetY="0" BaseTileLevel="0" BaseDegreesPerTile="180" ReferenceFrame="Sky" MeanRadius="0">
+        <Credits>NASA/JPL-Caltech/UCLA</Credits>
+        <CreditsUrl>http://wise.ssl.berkeley.edu/</CreditsUrl>
+        <ThumbnailUrl>http://www.worldwidetelescope.org/wwtweb/thumbnail.aspx?name=wise</ThumbnailUrl>
+      </ImageSet>
+    </ForegroundImageSet>
+  </Place>
+  <Place MSRCommunityId="0" MSRComponentId="0" Permission="0" Name="unWISE color, from W2 and W1 bands" DataSetType="Sky" RA="0" Dec="0" Constellation="" Classification="Unidentified" Magnitude="0" Distance="0" ZoomLevel="360" Rotation="0" Angle="0" DomeAlt="0" DomeAz="0" Opacity="100" AngularSize="360">
+    <Target>Custom</Target>
+    <ForegroundImageSet>
+      <ImageSet MSRCommunityId="0" MSRComponentId="0" Permission="0" Generic="False" DataSetType="Sky" BandPass="IR" Url="http://alasky.u-strasbg.fr/unWISE/color-W2-W1W2-W1/Norder{0}/Dir{1}/Npix{2}" TileLevels="8" WidthFactor="1" Sparse="True" Rotation="0" QuadTreeMap="0123" Projection="Healpix" Name="unWISE color, from W2 and W1 bands" FileType="jpeg" CenterY="0" CenterX="0" BottomsUp="False" StockSet="False" ElevationModel="False" OffsetX="0" OffsetY="0" BaseTileLevel="0" BaseDegreesPerTile="180" ReferenceFrame="Sky" MeanRadius="1">
+        <Credits>IPAC/NASA - D. Lang for the reprocessing</Credits>
+        <ThumbnailUrl>http://alasky.u-strasbg.fr/unWISE/color-W2-W1W2-W1/preview.jpg</ThumbnailUrl>
+      </ImageSet>
+    </ForegroundImageSet>
+  </Place>
+</Folder>

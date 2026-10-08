@@ -1,0 +1,188 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<Folder Browseable="True" Group="Explorer" Name="Orion Nebula" Searchable="False" Type="Earth">
+  <Place Angle="0" AngularSize="0" Constellation="ORI" DataSetType="Sky" Dec="-5.417921818065528" Magnitude="0" Name="JWST - MIRI" Opacity="100" RA="5.588969307845307" Rotation="0" Thumbnail="http://data1.wwtassets.org/packages/2023/06_jwst/weic2315c/thumb.jpg" ZoomLevel="0.10908982305422525">
+    <Description>An international team of scientists have used data collected by the NASA/ESA/CSA James Webb Space Telescope to detect a molecule known as the methyl cation (CH3+) for 
+                the first time, located in the protoplanetary disc surrounding a young star. They accomplished this feat with a cross-disciplinary expert analysis, including key input from laboratory 
+                spectroscopists. The vital role of CH3+ in interstellar carbon chemistry has been predicted since the 1970s, but Webb’s unique capabilities have finally made observing it possible — in 
+                a region of space where planets capable of accommodating life could eventually form. This hazy image is Webb’s view of a small region of the Orion Nebula, made with its MIRI instrument. 
+                Filled with gas and dust, the Orion Nebula is a rich star-forming region. The newborn and young stars emit harsh ultraviolet radiation that ionises the nebula, causing it to emit light at 
+                infrared wavelengths. MIRI is sensitive to long-wavelength, mid-infrared emission, highlighting the layers of hot gases on each side of the Orion Bar that stretches through the centre. The 
+                area captured here by MIRI is much smaller than the NIRCam view, but contains a remarkable amount of detail, thanks to MIRI’s unprecedented sensitivity at these longer wavelengths. This 
+                zoomed-in MIRI view of the Orion Bar contains the young star-protoplanetary disc system, named d203-506, that the team of astronomers scoured for key organic molecules. MIRI’s contribution to 
+                the view of d203-506 was critical to obtaining the widest range of spectra of the system, necessary to confirm their detection of the methyl cation. In particular, the molecule has a strong 
+                spectral line at around 7 microns, a wavelength that is impossible to detect through Earth’s atmosphere, but with MIRI’s in-built spectroscopy the team was able to unambiguously confirm the 
+                methyl cation’s presence. This version of the MIRI image has been scaled up, to match the scale of the larger NIRCam image. You can find the image in its original scale here. [Image description: 
+                A nebula made of many layers of cloudy, colourful material. In the top-left the nebula is coloured in greens, reds and yellows with a webbed, filament structure, two small stars and a darker gap 
+                region. A wall of thick, cloudy material crosses diagonally, extending towards the bottom right. It gives way to dark blue, sparse filaments with more dark gaps in the bottom corner. The image is 
+                hazy and unfocused.]
+            </Description>
+    <ForegroundImageSet>
+      <ImageSet BandPass="Visible" BaseDegreesPerTile="0.017494828479534964" BaseTileLevel="0" BottomsUp="False" CenterX="83.834543958661" CenterY="-5.4179175978584" DataSetType="Sky" ElevationModel="False" FileType=".png" Generic="False" Name="The Orion Bar region (upscaled MIRI image)" OffsetX="4.271198359261466e-06" OffsetY="4.271198359261466e-06" Projection="Tan" QuadTreeMap="" Rotation="-89.3200000000001" Sparse="True" StockSet="False" TileLevels="3" Url="http://data1.wwtassets.org/packages/2023/06_jwst/weic2315c/{1}/{3}/{3}_{2}.png" WidthFactor="2">
+        <Credits>ESA/Webb, NASA, CSA, M. Zamani (ESA/Webb), the PDRs4All ERS Team</Credits>
+        <CreditsUrl>https://esawebb.org/images/weic2315c/</CreditsUrl>
+        <ThumbnailUrl>http://data1.wwtassets.org/packages/2023/06_jwst/weic2315c/thumb.jpg</ThumbnailUrl>
+      </ImageSet>
+    </ForegroundImageSet>
+  </Place>
+  <Place Angle="0" AngularSize="0.39243617192450325" Constellation="ORI" DataSetType="Sky" Dec="-5.4082360464119255" Magnitude="0" Name="JWST - NIRCam" Opacity="100" RA="5.5895197501470335" Rotation="0" Thumbnail="http://data1.wwtassets.org/packages/2023/06_jwst/weic2315b/thumb.jpg" ZoomLevel="0.39243617192450325">
+    <Description>An international team of scientists have used data collected by the NASA/ESA/CSA James Webb Space Telescope to detect a molecule known as the methyl cation (CH3+) 
+                for the first time, located in the protoplanetary disc surrounding a young star. They accomplished this feat with a cross-disciplinary expert analysis, including key input from 
+                laboratory spectroscopists. The vital role of CH3+ in interstellar carbon chemistry has been predicted since the 1970s, but Webb’s unique capabilities have finally made observing 
+                it possible — in a region of space where planets capable of accommodating life could eventually form. This image is NIRCam’s view of the Orion Bar region studied by the team of 
+                astronomers. Bathed in harsh ultraviolet light from the stars of the Trapezium Cluster, it is an area of intense activity, with star formation and active astrochemistry. This made 
+                it a perfect place to study the exact impact that ultraviolet radiation has on the molecular makeup of the discs of gas and dust that surround new stars. The radiation erodes the 
+                nebula’s gas and dust in a process known as photoevaporation; this creates the rich tapestry of cavities and filaments that fill the view. The radiation also ionises the molecules, 
+                causing them to emit light — not only does this create a beautiful vista, it also allows astronomers to study the molecules using the spectrum of their emitted light obtained with 
+                Webb’s MIRI and NIRSpec instruments. The two very large, bright stars are two of the three stars in the θ² Orionis system — the Trapezium Cluster is also known as θ¹ Orionis. The 
+                brightest star here, θ² Orionis A, is surrounded by particularly bright and red puffs of dust, which are reflecting the star’s light towards Earth. Its great brightness — it is visible 
+                with the naked eye — is due to the fact that θ² Orionis A is itself a ternary system made of three closely bound bright stars.  There are more proplyds visible in this image than 
+                just d203-506 — the Orion Nebula is replete with such new stars. In the very top left, a tiny star is visible within a long, dusty cocoon. This globule has formed from the star’s 
+                protoplanetary disc, as the disc is broken down by the energetic radiation of the Trapezium Cluster. Around the globule, a round shockwave is strikingly visible moving through the 
+                gas of the Orion Nebula. [Image description: A nebula made of many layers of cloudy, colourful material. The top-left side of the image is brightly lit, filled with wispy, thin 
+                material in pale shades of pink and blue. A thick bar of denser, cloudier material crosses diagonally at the bottom right. It begins as orange and grows darker and sparser down to 
+                the corner. Two very bright stars, with very long diffraction spikes, lie in this sparse area.]
+            </Description>
+    <ForegroundImageSet>
+      <ImageSet BandPass="Visible" BaseDegreesPerTile="0.07004002440970655" BaseTileLevel="0" BottomsUp="False" CenterX="83.842800155636" CenterY="-5.408231415193" DataSetType="Sky" ElevationModel="False" FileType=".png" Generic="False" Name="The Orion Bar region (NIRCam image)" OffsetX="4.2749038336002535e-06" OffsetY="4.2749038336002535e-06" Projection="Tan" QuadTreeMap="" ReferenceFrame="Sky" Rotation="-95.00000000000004" Sparse="True" StockSet="False" TileLevels="5" Url="http://data1.wwtassets.org/packages/2023/06_jwst/weic2315b/{1}/{3}/{3}_{2}.png" WidthFactor="2">
+        <Credits>ESA/Webb, NASA, CSA, M. Zamani (ESA/Webb), the PDRs4All ERS Team</Credits>
+        <CreditsUrl>https://esawebb.org/images/weic2315b/</CreditsUrl>
+        <ThumbnailUrl>http://data1.wwtassets.org/packages/2023/06_jwst/weic2315b/thumb.jpg</ThumbnailUrl>
+      </ImageSet>
+    </ForegroundImageSet>
+  </Place>
+  <Place Angle="0" AngularSize="0.455301639695565" Classification="Unidentified" Constellation="ORI" DataSetType="Sky" Dec="-5.39418492383" Magnitude="0" Name="Hubble - Optical" Opacity="100" RA="5.587743435713339" Rotation="0" Thumbnail="http://wwtfiles.blob.core.windows.net/vamp/thumb-Hubble-heic0601d.jpg" ZoomLevel="0.455301639695565">
+    <Description>Packed into the centre of this region are bright lights of the Trapezium stars, the four heftiest stars in the Orion Nebula. 
+                Ultraviolet light unleashed by these stars is carving a cavity in the nebula and disrupting the growth of hundreds of smaller stars. 
+                The dark speck near the bottom, right of the image is a silhouette of an edge-on disk encircling a young star. Another whitish-looking 
+                disk is visible near the bottom, left, just above the two bright stars. This disk is encased in a bubble of gas and dust.
+            </Description>
+    <ForegroundImageSet>
+      <ImageSet BandPass="Visible" BaseDegreesPerTile="0.113825409923891" BaseTileLevel="0" BottomsUp="False" CenterX="83.81576265766898" CenterY="-5.394292462927885" DataSetType="Sky" ElevationModel="False" FileType=".png" Generic="False" Name="The Orion Bar (Hubble - Optical)" Projection="Tan" QuadTreeMap="" Rotation="0.02" Sparse="True" StockSet="False" TileLevels="4" Url="http://wwtfiles.blob.core.windows.net/vamp/Hubble-heic0601dL{1}X{2}Y{3}.png" WidthFactor="1">
+        <Credits>NASA, ESA, M. Robberto (Space Telescope Science Institute/ESA) and the Hubble Space Telescope Orion Treasury Project Team</Credits>
+        <CreditsUrl>http://www.spacetelescope.org/images/heic0601d/</CreditsUrl>
+        <ThumbnailUrl>http://wwtfiles.blob.core.windows.net/vamp/thumb-Hubble-heic0601d.jpg</ThumbnailUrl>
+      </ImageSet>
+    </ForegroundImageSet>
+  </Place>
+	<Place Angle="0" AngularSize="0" Constellation="ORI" DataSetType="Sky" Dec="-5.387293158436137" Magnitude="0" Name="JWST - NIRCam Long-wavelength" Opacity="100" RA="5.587233166022187" Rotation="0" Thumbnail="http://data1.wwtassets.org/packages/2023/10_jwst/orion_nircam_lw/thumb.jpg" ZoomLevel="1.267686772750636">
+		<Description>This image shows the full survey of the inner Orion Nebula and Trapezium Cluster made using the NIRCam instrument on the NASA/ESA/CSA James Webb Space Telescope. This is the long-wavelength colour composite, which focuses on the gas, dust, and molecules in the region with unprecedented sensitivity in the thermal infrared.
+
+				The cavity is mostly filled with ionised gas, seen here in purple, while the surroundings have a mix of dust and molecular gas seen in reds, browns, and greens. The Bright Bay to the upper left is being eroded by the massive stars at the centre of the region and there are many pillars of gas and dust which are being carved.
+
+				This young star-forming region is just a million years old and contains thousands of new stars spanning a range of masses from 40 down to less than 0.1 times the mass of the Sun. The most massive and hottest stars in the region, notably the Trapezium in the centre, have sculpted a cavity in the surface of the giant molecular cloud from which they were born, which can be readily seen in this image.
+
+				The Orion Nebula lies roughly 1300 light-years from Earth in the so-called 'sword' of the constellation of Orion the Hunter, and the image shows a region that is 4 by 2.75 light years in size.
+
+				Image description: An image of a young star-forming region filled with with wispy purple, green, and red nebulosity. The purple ionised gas is seen mostly towards the centre, with browns, greens, and reds behind, while the periphery is mostly bright green and darker brown to the left. There is a large spray of yellow, orange, red, and purple towards the top centre, and the nebula fades to near black to the right. There are thousands of stars sprinkled across the field, concentrated towards the centre, but they generally appear fainter at longer wavelengths, with some exceptions. The brightest sources in the field have extensive diffraction spikes characteristic of Webb.</Description>
+    <ForegroundImageSet>
+      <ImageSet BandPass="Visible" BaseDegreesPerTile="0.28643310584961923" BaseTileLevel="0" BottomsUp="False" CenterX="83.8084974903328" CenterY="-5.38729315843613" DataSetType="Sky" ElevationModel="False" FileType=".png" Generic="False" Name="Long-wavelength NIRCam Orion Nebula" OffsetY="-8.74124468535215e-06" Projection="Tan" QuadTreeMap="" Rotation="0.008016395284990032" Sparse="False" StockSet="False" TileLevels="6" Url="http://data1.wwtassets.org/packages/2023/10_jwst/orion_nircam_lw/{1}/{3}/{3}_{2}.png" WidthFactor="2">
+        <Credits>NASA, ESA, CSA / Mark McCaughrean and Sam Pearson</Credits>
+        <CreditsUrl>https://www.esa.int/ESA_Multimedia/Images/2023/09/Orion_Nebula_in_NIRCam_long-wavelength_channel</CreditsUrl>
+        <ThumbnailUrl>http://data1.wwtassets.org/packages/2023/10_jwst/orion_nircam_lw/thumb.jpg</ThumbnailUrl>
+      </ImageSet>
+    </ForegroundImageSet>
+  </Place>
+	<Place Angle="0" AngularSize="0" Constellation="ORI" DataSetType="Sky" Dec="-5.386928854253156" Magnitude="0" Name="JWST - NIRCam Short-wavelength" Opacity="100" RA="5.587232472506767" Rotation="0" Thumbnail="http://data1.wwtassets.org/packages/2023/10_jwst/orion_nircam_sw/thumb.jpg" ZoomLevel="1.270418727056915">
+		<Description>This image shows the full survey of the inner Orion Nebula and Trapezium Cluster made using the NIRCam instrument on the NASA/ESA/CSA James Webb Space Telescope. This is the short-wavelength colour composite, which reveals the nebula, its stars, and many other objects in unprecedented detail in the infrared.
+
+This young star-forming region is just a million years old and contains thousands of new stars spanning a range of masses from 40 down to less than 0.1 times the mass of the Sun. The region also contains many brown dwarfs, objects below seven percent of the mass of the Sun which are too small to start nuclear fusion in their cores. And below that, starting at roughly 13 times the mass of Jupiter, lie the planetary-mass objects. These new Webb data have revealed hundreds of such objects, floating freely in the nebula, not orbiting stars, the very smallest of which have just 60% the mass of Jupiter or two times the mass of Saturn.
+
+The Orion Nebula lies roughly 1300 light-years from Earth in the so-called 'sword' of the constellation of Orion the Hunter, and the image shows a region that is 4 by 2.75-light years in size, smaller than the distance between Earth and our nearest stellar neighbour, Proxima Centauri.
+
+Image description: An image of a young star-forming region filled with wispy blue, grey, green, and red nebulosity that is brightest towards the centre and fainter towards the edges, especially in the top left corner and on the right side. Thousands of stars are seen sprinkled across the field, concentrated towards the centre, and the brightest stars show the eight spikes due to diffraction that are characteristic of Webb images.</Description>
+    <ForegroundImageSet>
+      <ImageSet BandPass="Visible" BaseDegreesPerTile="0.28437029237027145" BaseTileLevel="0" BottomsUp="False" CenterX="83.8084870876015" CenterY="-5.38692885425316" DataSetType="Sky" ElevationModel="False" FileType=".png" Generic="False" Name="Short-wavelength NIRCam Orion Nebula" Projection="Tan" QuadTreeMap="" Rotation="-0.4958133416129608" Sparse="False" StockSet="False" TileLevels="7" Url="http://data1.wwtassets.org/packages/2023/10_jwst/orion_nircam_sw/{1}/{3}/{3}_{2}.png" WidthFactor="2">
+        <Credits>NASA, ESA, CSA / Mark McCaughrean and Sam Pearson</Credits>
+        <CreditsUrl>https://www.esa.int/ESA_Multimedia/Images/2023/09/Orion_Nebula_in_NIRCam_short-wavelength_channel</CreditsUrl>
+        <ThumbnailUrl>http://data1.wwtassets.org/packages/2023/10_jwst/orion_nircam_sw/thumb.jpg</ThumbnailUrl>
+      </ImageSet>
+    </ForegroundImageSet>
+  </Place>
+  <Place Angle="0" AngularSize="3.751702690533902" Classification="Unidentified" Constellation="ORI" DataSetType="Sky" Dec="-5.338774008678209" Magnitude="0" Name="HAWK-I - Infrared" Opacity="100" RA="5.587937102637692" Rotation="0" Thumbnail="http://data1.wwtassets.org/feeds/eso/eso1625a/thumb.jpg" ZoomLevel="3.751702690533902">
+    <Description>This spectacular image of the Orion Nebula star-formation region was obtained from multiple exposures using the HAWK-I infrared camera on ESO’s 
+                Very Large Telescope in Chile. This is the deepest view ever of this region and reveals more very faint planetary-mass objects than expected.
+            </Description>
+    <ForegroundImageSet>
+      <ImageSet BandPass="Visible" BaseDegreesPerTile="0.4855192072323072" BaseTileLevel="0" BottomsUp="False" CenterX="83.81876375487211" CenterY="-5.338829856288467" DataSetType="Sky" ElevationModel="False" FileType=".png" Generic="False" Name="A deep infrared view of the Orion Nebula from HAWK-I" OffsetX="1.48168703379e-05" OffsetY="1.48168703379e-05" Projection="Tan" QuadTreeMap="" Rotation="-90.06" Sparse="True" StockSet="False" TileLevels="6" Url="http://data1.wwtassets.org/feeds/eso/eso1625a/L{1}X{2}Y{3}.png" WidthFactor="2">
+        <Credits>ESO/H. Drass et al.</Credits>
+        <CreditsUrl>https://www.eso.org/public/images/eso1625a/</CreditsUrl>
+        <ThumbnailUrl>http://data1.wwtassets.org/feeds/eso/eso1625a/thumb.jpg</ThumbnailUrl>
+      </ImageSet>
+    </ForegroundImageSet>
+  </Place>
+  <Place Angle="0" AngularSize="2.72995787129592" Classification="Unidentified" Constellation="ORI" DataSetType="Sky" Dec="-5.41360434368671" Magnitude="0" Name="Spitzer - Visible and Infrared Composite" Opacity="100" RA="5.58603519322196" Rotation="0" Thumbnail="http://wwtfiles.blob.core.windows.net/vamp/thumb-Spitzer-ssc2006-21a1.jpg" ZoomLevel="2.72995787129592">
+    <Description>NASA's Spitzer and Hubble Space Telescopes have teamed up to expose the chaos that baby stars are creating 1,500 light-years away in a 
+                cosmic cloud called the Orion Nebula. This striking infrared and visible-light composite indicates that four monstrously massive stars at the center 
+                of the cloud may be the main culprits in the familiar Orion constellation. The stars are collectively called the "Trapezium." Their community can be 
+                identified as the yellow smudge near the center of the image. Swirls of green in Hubble's ultraviolet and visible-light view reveal hydrogen and sulfur 
+                gas that have been heated and ionized by intense ultraviolet radiation from the Trapezium's stars. Meanwhile, Spitzer's infrared view exposes carbon-rich 
+                molecules called polycyclic aromatic hydrocarbons in the cloud. These organic molecules have been illuminated by the Trapezium's stars, and are shown in 
+                the composite as wisps of red and orange. On Earth, polycyclic aromatic hydrocarbons are found on burnt toast and in automobile exhaust.
+            </Description>
+    <ForegroundImageSet>
+      <ImageSet BandPass="Visible" BaseDegreesPerTile="0.682489467823981" BaseTileLevel="0" BottomsUp="False" CenterX="83.78998255880356" CenterY="-5.414011505607758" DataSetType="Sky" ElevationModel="False" FileType=".png" Generic="False" Name="Orion Nebula" Projection="Tan" QuadTreeMap="" Rotation="0.0159151127007" Sparse="True" StockSet="False" TileLevels="5" Url="http://wwtfiles.blob.core.windows.net/vamp/Spitzer-ssc2006-21a1L{1}X{2}Y{3}.png" WidthFactor="1">
+        <Credits>NASA/JPL-Caltech/T. Megeath</Credits>
+        <CreditsUrl>https://www.spitzer.caltech.edu/image/ssc2006-21a1-orion-nebula</CreditsUrl>
+        <ThumbnailUrl>http://wwtfiles.blob.core.windows.net/vamp/thumb-Spitzer-ssc2006-21a1.jpg</ThumbnailUrl>
+      </ImageSet>
+    </ForegroundImageSet>
+  </Place>
+  <Place Angle="0" AngularSize="7.91538558418722" Classification="Unidentified" Constellation="ORI" DataSetType="Sky" Dec="-5.4786707566698025" Magnitude="0" Name="ESO/VST - Optical" Opacity="100" RA="5.585624862604586" Rotation="0" Thumbnail="http://data1.wwtassets.org/feeds/eso/eso1723a/thumb.jpg" ZoomLevel="7.91538558418722">
+    <Description>OmegaCAM — the wide-field optical camera on ESO’s VLT Survey Telescope (VST) — has captured the spectacular Orion Nebula and its 
+                associated cluster of young stars in great detail,  producing this beautiful new image. This famous object, the birthplace of many massive stars, 
+                is one of the closest stellar nurseries, at a distance of about 1350 light-years.
+            </Description>
+    <ForegroundImageSet>
+      <ImageSet BandPass="Visible" BaseDegreesPerTile="1.9400750895169536" BaseTileLevel="0" BottomsUp="False" CenterX="83.78422678998785" CenterY="-5.47992643578249" DataSetType="Sky" ElevationModel="False" FileType=".png" Generic="False" Name="The Orion Nebula and cluster from the VLT Survey Telescope" OffsetX="2.960319655635e-05" OffsetY="2.960319655635e-05" Projection="Tan" QuadTreeMap="" Rotation="-0.17999999999999985" Sparse="True" StockSet="False" TileLevels="7" Url="http://data1.wwtassets.org/feeds/eso/eso1723a/L{1}X{2}Y{3}.png" WidthFactor="2">
+        <Credits>ESO/G. Beccari</Credits>
+        <CreditsUrl>https://www.eso.org/public/images/eso1723a/</CreditsUrl>
+        <ThumbnailUrl>http://data1.wwtassets.org/feeds/eso/eso1723a/thumb.jpg</ThumbnailUrl>
+      </ImageSet>
+    </ForegroundImageSet>
+  </Place>
+  <Place Angle="0" AngularSize="15.018967422911999" Classification="Unidentified" Constellation="ORI" DataSetType="Sky" Dec="-5.3220943948268795" Magnitude="0" Name="VISTA - Infrared" Opacity="100" RA="5.5859953321670055" Rotation="0" Thumbnail="http://data1.wwtassets.org/feeds/eso/eso1006a/thumb.jpg" ZoomLevel="15.018967422911999">
+    <Description>This wide-field view of the Orion Nebula (Messier 42), lying about 1350 light-years from Earth, was taken with the VISTA 
+                infrared survey telescope at ESO’s Paranal Observatory in Chile.The new telescope’s huge field of view allows the whole nebula and its 
+                surroundings to be imaged in a single picture and its infrared vision also means that it can peer deep into the normally hidden dusty 
+                regions and reveal the curious antics of the very active young stars buried there. This image was created from images taken through Z, 
+                J and Ks filters in the near-infrared part of the spectrum. The exposure times were ten minutes per filter. The image covers a region 
+                of sky about one degree by 1.5 degrees.
+            </Description>
+    <ForegroundImageSet>
+      <ImageSet BandPass="Visible" BaseDegreesPerTile="1.5518194091727158" BaseTileLevel="0" BottomsUp="False" CenterX="83.82245734680156" CenterY="-5.39053600957087" DataSetType="Sky" ElevationModel="False" FileType=".png" Generic="False" Name="VISTA's infrared view of the Orion Nebula*" OffsetX="0.032001300894799356" OffsetY="0.0689306930147772" Projection="Tan" QuadTreeMap="" Rotation="-0.0713523831423867" Sparse="True" StockSet="False" TileLevels="6" Url="http://data1.wwtassets.org/feeds/eso/eso1006a/L{1}X{2}Y{3}.png" WidthFactor="2">
+        <Credits>ESO/J. Emerson/VISTA. Acknowledgment: Cambridge Astronomical Survey Unit</Credits>
+        <CreditsUrl>https://www.eso.org/public/images/eso1006a/</CreditsUrl>
+        <ThumbnailUrl>http://data1.wwtassets.org/feeds/eso/eso1006a/thumb.jpg</ThumbnailUrl>
+      </ImageSet>
+    </ForegroundImageSet>
+  </Place>
+  <Place Angle="0" AngularSize="33.9283333333333" Classification="Nebula" Constellation="ORI" DataSetType="Sky" Dec="-5.34361111111111" Magnitude="0" Name="Don McCrady - RGB/H-alpha" Opacity="100" RA="5.586111111111109" Rotation="0" ZoomLevel="33.9283333333333">
+    <Description>The Great Orion Nebula (M42) is a true showpiece in the night sky. It is easily visible to the naked eye as a fuzzy 
+                patch in the sword of Orion, and is a beautiful sight in telescopes of all sizes. It lies fairly close to our part of the galaxy, 
+                lying some 1500 light years distant. The center portion contains a tight grouping of stars called the Trapezium. M43 lies just above 
+                the Trapezium region, and another bright reflection nebula called The Running Man Nebula is near the top of this frame. This image 
+                is a blend of RGB data with Hydrogen-Alpha data. The RGB was blended with the H-alpha to form an artificial luminance layer, and the 
+                H-alpha was blended into the red channel of the colour layer.
+            </Description>
+    <ForegroundImageSet>
+      <ImageSet BandPass="Visible" BaseDegreesPerTile="2.13195253505933" BaseTileLevel="0" BottomsUp="False" CenterX="83.79335576398091" CenterY="-5.342150949749448" DataSetType="Sky" ElevationModel="False" FileType=".png" Generic="False" Name="Great Nebula in Orion" Projection="Tan" QuadTreeMap="" Rotation="0.52" Sparse="True" StockSet="False" TileLevels="3" Url="http://www.worldwidetelescope.org/wwtweb/tiles.aspx?q={1},{2},{3},843190889" WidthFactor="2">
+        <Credits>Don J. McCrady</Credits>
+        <CreditsUrl>http://www.flickr.com/photos/djmccrady/2221024093/</CreditsUrl>
+        <ThumbnailUrl>http://www.worldwidetelescope.org/wwtweb/thumbnail.aspx?name=843190889</ThumbnailUrl>
+      </ImageSet>
+    </ForegroundImageSet>
+  </Place>
+  <Place Angle="0" AngularSize="174.232053577738" DataSetType="Sky" Dec="-0.128822370036991" Magnitude="0" Name="Matt Harbison - HA-LRGB" Opacity="100" RA="5.6218844822333125" Rotation="0" Thumbnail="http://data1.wwtassets.org/packages/2022/04_orion_harbison/7_year_orion/thumb.jpg" ZoomLevel="174.232053577738">
+	<Description>
+		The Orion Constellation Captured by Matt Harbison
+
+Captured over 7 years across the Southern US and Marathon Texas. Over 200 individual panels consisting of 12,816 Individual light frames. </Description>
+    <ForegroundImageSet>
+      <ImageSet BandPass="Visible" BaseDegreesPerTile="29.206051740085766" BaseTileLevel="0" BottomsUp="False" CenterX="84.73106743929381" CenterY="0.39947787331717655" DataSetType="Sky" ElevationModel="False" FileType=".png" Generic="False" Name="7 Year Orion by Matt Harbison" Projection="Tan" QuadTreeMap="" Rotation="-69.92000000000006" Sparse="True" StockSet="False" TileLevels="8" Url="http://data1.wwtassets.org/packages/2022/04_orion_harbison/7_year_orion/{1}/{3}/{3}_{2}.png" WidthFactor="2">
+        <Credits>Matt Harbison</Credits>
+        <CreditsUrl>https://space4everybody.com/home/project-orion/</CreditsUrl>
+        <ThumbnailUrl>http://data1.wwtassets.org/packages/2022/04_orion_harbison/7_year_orion/thumb.jpg</ThumbnailUrl>
+      </ImageSet>
+    </ForegroundImageSet>
+  </Place>
+</Folder>
