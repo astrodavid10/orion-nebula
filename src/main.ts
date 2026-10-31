@@ -97,7 +97,9 @@ if (boolParam("kioskStats")) {
     // (audit O5). public/orion.wtml.
     wtml: "orion.wtml",
     bgWtml: "https://data1.wwtassets.org/packages/2023/06_pas/BackgroundImagery_v2.wtml",
-    bgName: "unWISE color, from W2 and W1 bands",
+    // All-sky base under the layer stack: NASA Deep Star Maps 2020 (optical).
+    // Visitors can still switch surveys from the menu.
+    bgName: "Deep Star Maps 2020",
     introTitle: "Explore the Orion Nebula",
     // The 2023 app opened on this layer (FolderView items[4]).
     startImage: "JWST - NIRCam Short-wavelength",

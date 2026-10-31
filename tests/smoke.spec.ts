@@ -67,6 +67,9 @@ test("boots with all eleven layers on the sky, stacked widest first, opening set
     .filter(([, l]) => (l as OrionApp).get_enabled()).map(([k]) => k.split("::")[0]).sort());
   expect(enabled).toEqual(OPENING_SET);
   await expect(page.locator(".panel-count")).toHaveText(`3/${places.length}`);
+  // The all-sky base under the stack.
+  expect(await page.evaluate(() => (window as unknown as { orionApp: OrionApp }).orionApp.curBackgroundImagesetName))
+    .toBe("Deep Star Maps 2020");
   expect(await app(page)).toBe(true);
   expect(errors).toEqual([]);
 });

@@ -21,7 +21,8 @@ patches beyond the tile-sharpness one in `src/tile-quality.ts`.
 
 ## Layer stack
 
-As in the 2023 app, every Place in `public/orion.wtml` is added once at boot as
+The all-sky base is NASA's Deep Star Maps 2020 (`bgName` in `src/main.ts`);
+the menu's sky-survey list still switches it. As in the 2023 app, every Place in `public/orion.wtml` is added once at boot as
 an `ImageSetLayer` and stays on the sky; nothing is swapped or deleted.
 
 - **Order:** widest footprint (Place `ZoomLevel`) at the bottom, so each smaller,
