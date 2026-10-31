@@ -70,10 +70,6 @@
           >
             <font-awesome-icon icon="panorama" /> Choose sky survey
           </button></li>
-          <li><button type="button" class="hamb-menu-item" :aria-pressed="showCrossfade" @click="toggleCrossfade">
-            <font-awesome-icon icon="adjust" /> <span class="hamb-menu-label">Opacity slider</span>
-            <font-awesome-icon icon="check" class="menu-check" :class="{ on: showCrossfade }" />
-          </button></li>
           <li><button type="button" class="hamb-menu-item" @click="openLink('https://www.rocketcenter.com/INTUITIVEPlanetarium/InteractiveAstronomy', 'INTUITIVE Planetarium')">
             <font-awesome-icon icon="building-columns" /> <span class="hamb-menu-label"><em>INTUITIVE</em><sup>®</sup>&nbsp;Planetarium</span>
           </button></li>
@@ -120,17 +116,22 @@
         </div>
       </div>
 
-      <!-- Image gallery (top-right; in kiosk mode a full-width horizontal
-           strip along the top — see .kiosk .gallery-wrap + ImageGallery's
-           kiosk prop). -->
+      <!-- Layer panel (top-right; in kiosk mode a full-width strip along the
+           top). Every image is on the sky at once; each row sets one layer's
+           opacity, and selecting a name flies to it. -->
       <div class="gallery-wrap">
-        <image-gallery
-          :places="galleryPlaces"
+        <layer-panel
+          :places="panelPlaces"
+          :opacities="opacities"
           :selected-key="selectedKey"
           :kiosk="kioskMode"
-          @select="onGallerySelect"
-          @visible-change="visibleOrder = $event"
-        ></image-gallery>
+          @select="onPanelSelect"
+          @opacity="onPanelOpacity"
+          @toggle="toggleLayer"
+          @solo="soloLayer"
+          @preset="applyPreset"
+          @group="setGroupShown"
+        ></layer-panel>
       </div>
 
       <!-- Intro modal -->
@@ -181,12 +182,12 @@
 
               <h2 class="intro-section-title">How to Use</h2>
               <ul class="intro-instructions">
+                <li><span class="intro-icon"><font-awesome-icon icon="layer-group" /></span>
+                  <span><strong>Layers:</strong> Every image sits in its true place on the sky, the sharpest on top. Use each image's slider in the <em>Layers</em> panel to fade it in or out and compare what each telescope reveals.</span></li>
                 <li><span class="intro-icon"><font-awesome-icon icon="globe" /></span>
-                  <span><strong>Browse:</strong> Pick an image from the <em>Images</em> gallery; the view flies to it and fades it in.</span></li>
+                  <span><strong>Browse:</strong> Select an image's name to fly to it (and show it if it's hidden).</span></li>
                 <li><span class="intro-icon"><font-awesome-icon icon="arrows-alt" /></span>
                   <span><strong>Navigate:</strong> Drag to pan; scroll or pinch to zoom.</span></li>
-                <li><span class="intro-icon"><font-awesome-icon icon="table-columns" /></span>
-                  <span><strong>Compare:</strong> Blend two telescopes' views of the same spot to see what each wavelength reveals.</span></li>
                 <li><span class="intro-icon"><font-awesome-icon icon="circle-dot" /></span>
                   <span><strong>Markers:</strong> Rings mark proplyds (young stars with planet-forming disks) and diamonds mark JuMBOs (free-floating pairs of planet-mass objects). Select one to learn more.</span></li>
                 <li><span class="intro-icon"><font-awesome-icon icon="panorama" /></span>
@@ -214,10 +215,10 @@
         </div>
       </transition>
 
-      <!-- Bottom dock: the survey menu or the description panel, then the
-           opacity or compare bar, stacked in one flex column so they can't
-           overlap each other. layoutDock() sizes it against the gallery so it
-           can't run under the thumbnails either. -->
+      <!-- Bottom dock: the survey menu, the marker card or the description
+           panel, stacked in one flex column so they can't overlap each other.
+           layoutDock() sizes it against the layer panel so it can't run under
+           it either. -->
       <div ref="bottomDock" class="bottom-dock">
         <!-- Sky survey selector -->
         <transition name="fade">
@@ -330,64 +331,10 @@
             </p>
             </div>
             <div class="desc-actions">
-              <button
-                v-if="!compareActive && compareCandidates.length"
-                type="button"
-                class="desc-view2d"
-                v-tip="'Blend with another image of the same target'"
-                @click="startCompare()"
-              >
-                <font-awesome-icon icon="table-columns" /> Compare ({{ compareCandidates.length }})
-              </button>
               <button v-if="!kioskMode" type="button" class="desc-view2d" @click="shareView">
                 <font-awesome-icon icon="share-nodes" /> {{ shareStatus || 'Share' }}
               </button>
             </div>
-          </div>
-        </transition>
-
-        <!-- Crossfade opacity slider -->
-        <transition name="fade">
-          <div class="crossfade-bar" v-if="showCrossfade && !compareActive">
-            <span class="crossfade-text">JWST opacity</span>
-            <input
-              class="opacity-range"
-              type="range"
-              min="0"
-              max="100"
-              v-model.number="foregroundOpacity"
-              aria-label="JWST image opacity"
-            />
-          </div>
-        </transition>
-
-        <!-- Compare bar (audit J9): blend the current image (left end of the
-             slider) with another image of the same target (right end). -->
-        <transition name="fade">
-          <div class="compare-bar" v-if="compareActive">
-            <span class="compare-name" :title="selectedName">{{ selectedName }}</span>
-            <input
-              class="opacity-range"
-              type="range"
-              min="0"
-              max="100"
-              v-model.number="compareOpacity"
-              aria-label="Blend between the two images"
-            />
-            <select
-              class="compare-select"
-              :value="compareKey"
-              aria-label="Image to compare with"
-              @change="onCompareSelect"
-            >
-              <option v-for="p in compareCandidates" :key="placeKey(p)" :value="placeKey(p)">{{ p.get_name() }}</option>
-            </select>
-            <button type="button" class="compare-icon-btn" aria-label="Make the compared image the main one" v-tip="'Swap'" @click="swapCompare">
-              <font-awesome-icon icon="right-left" />
-            </button>
-            <button type="button" class="compare-icon-btn" aria-label="Exit compare" v-tip="'Exit compare'" @click="exitCompare">
-              <font-awesome-icon icon="times" />
-            </button>
           </div>
         </transition>
       </div>
@@ -441,15 +388,16 @@
 
 <script lang="ts">
 import { defineComponent, markRaw } from "vue";
-import { Folder, Place, ImageSetLayer, WWTControl } from "@wwtelescope/engine";
+import { Folder, Place, ImageSetLayer, LayerManager, WWTControl } from "@wwtelescope/engine";
 import { engineStore } from "@wwtelescope/engine-pinia";
 import { applyImageSetLayerSetting } from "@wwtelescope/engine-helpers";
 import { MiniDSBase, BackgroundImageset } from "@cosmicds/vue-toolkit";
 // Side effect: sharper tiles (installs the RenderContext/WWTControl patch).
 import "./tile-quality";
-import { normalizeName } from "./layerTypes";
+import { normalizeName, groupForName, LayerGroup } from "./layerTypes";
 import { placeKey } from "./placeKey";
 import KioskQrModal from "./KioskQrModal.vue";
+import LayerPanel from "./LayerPanel.vue";
 import {
   installKioskGuards, scheduleDailyReload, createIdleWatcher, IdleWatcher, isHttpUrl,
   KIOSK_RELOAD_HOUR, KIOSK_IDLE_MS, KIOSK_ATTRACT_DWELL_MS, KIOSK_ATTRACT_FALLBACK_STEP_MS,
@@ -520,7 +468,6 @@ function upgradeToHttps(text: string): string {
 }
 
 const D2R = Math.PI / 180;
-const R2D = 180 / Math.PI;
 
 // Fisher–Yates shuffle (returns a new array) for the kiosk attract loop.
 function shuffled<T>(arr: T[]): T[] {
@@ -532,33 +479,48 @@ function shuffled<T>(arr: T[]): T[] {
   return a;
 }
 
-function separationDeg(ra1: number, dec1: number, ra2: number, dec2: number): number {
-  const c = Math.sin(dec1) * Math.sin(dec2) + Math.cos(dec1) * Math.cos(dec2) * Math.cos(ra1 - ra2);
-  return Math.acos(Math.max(-1, Math.min(1, c))) * R2D;
-}
+// Opening state of the layer stack: the images shown at full opacity, the
+// rest at 0 (the 2023 app opened with all eleven at full opacity). WTML Place
+// names, matched via normalizeName. The panel's Reset returns to this set.
+// Wide context, infrared nebula, and the start image (the JuMBO survey) with
+// nothing stacked over it, so the image the app opens on is the one you see.
+const DEFAULT_SHOWN = [
+  "Matt Harbison - HA-LRGB",
+  "VISTA - Infrared",
+  "JWST - NIRCam Short-wavelength",
+];
+
+const HARBISON = "Matt Harbison - HA-LRGB";
+const VISTA = "VISTA - Infrared";
 
 // Guided tour: from a backyard telescope's wide view down to Webb's close-up
-// of the Orion Bar. Names are WTML Place names, matched via normalizeName.
-const TOUR_STOPS: { name: string; caption: string }[] = [
-  { name: "Matt Harbison - HA-LRGB",
+// of the Orion Bar. Each stop is a scene: it flies to `name` and fades the
+// stack to exactly the `show` images. Names are WTML Place names.
+const TOUR_STOPS: { name: string; show: string[]; caption: string }[] = [
+  { name: HARBISON, show: [HARBISON],
     caption: "Orion's Sword through a backyard telescope. The Orion Nebula is the bright cloud at its heart, a star nursery about 1,350 light-years away." },
-  { name: "ESO/VST - Optical",
+  { name: "ESO/VST - Optical", show: [HARBISON, "ESO/VST - Optical"],
     caption: "In visible light, glowing hydrogen and dust surround the young cluster at the nebula's centre." },
-  { name: "VISTA - Infrared",
+  { name: VISTA, show: [HARBISON, VISTA],
     caption: "Infrared light passes through dust, so ESO's VISTA telescope sees thousands of young stars that visible light hides." },
-  { name: "HAWK-I - Infrared",
+  { name: "HAWK-I - Infrared", show: [HARBISON, VISTA, "HAWK-I - Infrared"],
     caption: "A deep infrared look from the Very Large Telescope, used to count faint brown dwarfs and planet-mass objects in the cluster." },
-  { name: "Hubble - Optical",
+  { name: "Hubble - Optical", show: [HARBISON, VISTA, "Hubble - Optical"],
     caption: "Hubble's view of the Orion Bar: a wall of gas being worn away by ultraviolet light from the hot Trapezium stars." },
-  { name: "JWST - NIRCam Long-wavelength",
+  { name: "JWST - NIRCam Long-wavelength", show: [HARBISON, VISTA, "JWST - NIRCam Long-wavelength"],
     caption: "Webb's longer near-infrared wavelengths trace warm dust and molecules across the inner nebula." },
-  { name: "JWST - NIRCam Short-wavelength",
+  { name: "JWST - NIRCam Short-wavelength", show: [HARBISON, VISTA, "JWST - NIRCam Short-wavelength"],
     caption: "Webb's sharpest near-infrared view. Turn on the JuMBO markers to find pairs of planet-mass objects floating free in the cluster." },
-  { name: "JWST - NIRCam",
-    caption: "Close in on the Orion Bar, where the Trapezium's radiation eats into the molecular cloud." },
-  { name: "JWST - MIRI",
+  { name: "JWST - NIRCam", show: [HARBISON, VISTA, "Hubble - Optical", "JWST - NIRCam"],
+    caption: "Close in on the Orion Bar, where the Trapezium's radiation eats into the molecular cloud. Hubble's visible-light view frames Webb's." },
+  { name: "JWST - MIRI", show: [HARBISON, VISTA, "JWST - NIRCam", "JWST - MIRI"],
     caption: "Webb's mid-infrared MIRI camera sees glowing carbon-rich molecules along the edge of the Orion Bar." },
 ];
+
+// One in-flight opacity animation across any number of layers. Times are ms
+// from `start`; opacities are 0–1 except toPct (the slider value it lands on).
+interface LayerFade { from: number; to: number; toPct: number; t0: number; t1: number }
+interface FadeAnim { start: number; total: number; fades: Record<string, LayerFade> }
 
 // What visitors are looking at when they open a marker (audit O12).
 const KIND_INTRO: Record<CatalogKind, string> = {
@@ -579,8 +541,8 @@ const FADE_FLOOR = 0.02;
 const MIN_SLEW_MS = 2500;
 const MAX_SLEW_MS = 6000;
 const REDUCED_MOTION_FADE_MS = 400;
-const COMPARE_MATCH_FRACTION = 0.5;
-const COMPARE_MAX_CANDIDATES = 8;
+// Panel actions (eye, Solo, All/None/Reset, group chips) fade this fast.
+const QUICK_FADE_MS = 350;
 const IS_COARSE_POINTER = window.matchMedia("(pointer: coarse)").matches;
 
 // Background sky surveys, ordered high-energy → infrared (audit O10: loaded
@@ -603,7 +565,7 @@ export default defineComponent({
   extends: MiniDSBase,
   name: "OrionViewer",
 
-  components: { "kiosk-qr-modal": KioskQrModal },
+  components: { "kiosk-qr-modal": KioskQrModal, "layer-panel": LayerPanel },
 
   props: {
     wwtNamespace: { type: String, required: true },
@@ -629,16 +591,20 @@ export default defineComponent({
       positionSet: false,
       metadataLoaded: false,
       bgSurveyLoaded: false,
-      startLayerLoaded: false,
+      stackReady: false,
       hasFlownToStart: false,
 
-      // One ImageSetLayer per selected image, crossfaded (audit O2: one image
-      // at a time, never all eleven stacked at full opacity).
-      currentLayer: null as ImageSetLayer | null,
-      currentOpacity: 0,
-      imageLayers: [] as ImageSetLayer[],
-      selectSeq: 0,
-      visibleOrder: [] as Place[],
+      // The layer stack: one ImageSetLayer per Place, all on the sky at once
+      // (as in 2023), widest at the bottom. Added once at boot, never deleted.
+      // `opacities` is the panel's slider state in percent; `liveOpacity` is
+      // what the engine has (0–1, mid-fade values included). The raw maps are
+      // markRaw so Vue never proxies an engine object.
+      stack: [] as Place[],
+      layerByKey: markRaw({}) as Record<string, ImageSetLayer>,
+      liveOpacity: markRaw({}) as Record<string, number>,
+      lastShown: markRaw({}) as Record<string, number>,
+      opacities: {} as Record<string, number>,
+      anim: null as FadeAnim | null,
 
       showIntro: true,
       showQrModal: false,
@@ -655,7 +621,6 @@ export default defineComponent({
       introTriggerEl: null as HTMLElement | null,
       isMenuOpen: false,
       showSurveyMenu: false,
-      showCrossfade: true,
       showDescription: true,
 
       accentColor: "#F0AB52",
@@ -684,12 +649,6 @@ export default defineComponent({
 
       tourActive: false,
       tourIdx: 0,
-
-      compareActive: false,
-      comparePlace: null as Place | null,
-      compareLayer: null as ImageSetLayer | null,
-      compareOpacity: 50,
-      compareSeq: 0,
 
       liveMessage: "",
       dockObserver: null as ResizeObserver | null,
@@ -778,13 +737,13 @@ export default defineComponent({
     },
     ready(): boolean {
       return this.layersLoaded && this.positionSet && this.metadataLoaded
-        && this.bgSurveyLoaded && this.startLayerLoaded;
+        && this.bgSurveyLoaded && this.stackReady;
     },
     loadingStatus(): string {
       if (!this.layersLoaded) { return "Loading imagery catalog…"; }
       if (!this.metadataLoaded) { return "Loading image details…"; }
       if (!this.bgSurveyLoaded) { return "Loading sky surveys…"; }
-      if (!this.startLayerLoaded) { return "Loading starting image…"; }
+      if (!this.stackReady) { return "Placing the images on the sky…"; }
       if (!this.positionSet) { return "Finishing up…"; }
       return "Loading…";
     },
@@ -794,8 +753,9 @@ export default defineComponent({
     selectedKey(): string {
       return this.selectedPlace ? placeKey(this.selectedPlace) : "";
     },
-    galleryPlaces(): Place[] {
-      return this.places;
+    // The panel lists the stack top first, like an image editor's layers.
+    panelPlaces(): Place[] {
+      return this.stack.slice().reverse();
     },
     startPlace(): Place | null {
       if (this.places.length === 0) { return null; }
@@ -807,40 +767,16 @@ export default defineComponent({
       }
       return this.places[0];
     },
-    tourPlaces(): { place: Place; caption: string }[] {
-      const out: { place: Place; caption: string }[] = [];
+    tourPlaces(): { place: Place; show: string[]; caption: string }[] {
+      const out: { place: Place; show: string[]; caption: string }[] = [];
       for (const stop of TOUR_STOPS) {
         const place = this.placeByName(stop.name);
-        if (place) { out.push({ place, caption: stop.caption }); }
+        if (place) { out.push({ place, show: stop.show, caption: stop.caption }); }
       }
       return out;
     },
     tourCaption(): string {
       return this.tourActive ? (this.tourPlaces[this.tourIdx]?.caption ?? "") : "";
-    },
-    // Other images covering (roughly) the same patch of sky, nearest first.
-    compareCandidates(): Place[] {
-      const cur = this.selectedPlace;
-      if (!cur) { return []; }
-      const iset = cur.get_studyImageset() ?? cur.get_backgroundImageset();
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const field = (iset as any)?.get_baseTileDegrees?.() ?? 0;
-      const limit = Math.max(0.02, field * COMPARE_MATCH_FRACTION);
-      const c = this.placeCenter(cur);
-      const key = placeKey(cur);
-      return this.places
-        .filter((p) => placeKey(p) !== key)
-        .map((p) => {
-          const pc = this.placeCenter(p);
-          return { p, sep: separationDeg(c.raRad, c.decRad, pc.raRad, pc.decRad) };
-        })
-        .filter((x) => x.sep <= limit)
-        .sort((a, b) => a.sep - b.sep)
-        .slice(0, COMPARE_MAX_CANDIDATES)
-        .map((x) => x.p);
-    },
-    compareKey(): string {
-      return this.comparePlace ? placeKey(this.comparePlace) : "";
     },
     safeCreditsUrl(): string {
       const u = this.currentMeta.creditsUrl;
@@ -930,19 +866,6 @@ export default defineComponent({
         this.setBackgroundImageByName(name);
       },
     },
-    foregroundOpacity: {
-      get(): number {
-        return this.currentOpacity;
-      },
-      set(o: number) {
-        this.cancelFade();
-        for (const layer of this.imageLayers) {
-          if (layer !== this.currentLayer) { this.setLayerOpacity(layer, 0); }
-        }
-        this.pruneLayers();
-        this.setLayerOpacity(this.currentLayer, o);
-      },
-    },
   },
 
   watch: {
@@ -969,9 +892,6 @@ export default defineComponent({
       this.overlay?.setVisible("jumbo", on);
       if (!on && this.selectedMarker?.kind === "jumbo") { this.closeMarkerCard(); }
       this.syncUrl();
-    },
-    compareOpacity(v: number): void {
-      if (this.compareLayer) { applyImageSetLayerSetting(this.compareLayer, ["opacity", v / 100]); }
     },
   },
 
@@ -1112,14 +1032,13 @@ export default defineComponent({
         this.places = this.extractPlaces(folder);
         this.layersLoaded = true;
 
+        await withTimeout(this.buildStack(), "Placing the images on the sky", 30_000);
+
         this.installCatalogOverlay();
 
         if (this.places.length > 0) {
           this.frameStart();
           this.maybeFlyToStart();
-          this.warmStartLayer();
-        } else {
-          this.startLayerLoaded = true;
         }
         this.positionSetTimer = window.setTimeout(() => { this.positionSet = true; }, 150);
       } catch (err) {
@@ -1264,51 +1183,218 @@ export default defineComponent({
       this.onSelectPlace(this.startPlace);
     },
 
-    // Resolve the start image's layer once so the loading screen can gate on
-    // it; a failed layer degrades to a console note, never a stuck spinner (O4).
-    warmStartLayer(): void {
-      const place = this.startPlace;
-      if (!place) { this.startLayerLoaded = true; return; }
-      const iset = place.get_studyImageset() ?? place.get_backgroundImageset();
-      this.addImageSetLayer({
-        url: iset?.get_url() ?? "",
-        mode: "preloaded",
-        name: `${place.get_name()} (prewarm)`,
-        goto: false,
-      }).then((layer) => {
-        this.startLayerLoaded = true;
-        this.deleteLayer(layer.id);
-      }).catch((err) => {
-        console.warn("warmStartLayer: failed to prewarm start image", err);
-        this.startLayerLoaded = true;
-      });
-    },
-
-    setLayerOpacity(layer: ImageSetLayer | null, opacity: number): void {
-      if (!layer) { return; }
-      applyImageSetLayerSetting(layer, ["opacity", opacity / 100]);
-      if (layer === this.currentLayer) {
-        this.currentOpacity = opacity;
+    // ── Layer stack ────────────────────────────────────────────────────────
+    // Add every Place as an ImageSetLayer, widest first, so each later (smaller,
+    // sharper) image draws on top: the 2023 nesting, but ordered by footprint
+    // rather than by WTML order. Layers are added one at a time so the engine's
+    // draw order is the stack order. A layer that fails to add is left out
+    // with a console note rather than failing the boot (O4).
+    async buildStack(): Promise<void> {
+      const order = this.places
+        .map((place, i) => ({ place, i }))
+        // Ties: the later WTML entry goes lower, as in the 2023 app.
+        .sort((a, b) => (b.place.get_zoomLevel() - a.place.get_zoomLevel()) || (b.i - a.i))
+        .map((x) => x.place);
+      const defaults = this.defaultTargets(order);
+      const stack: Place[] = [];
+      for (const place of order) {
+        const key = placeKey(place);
+        const iset = place.get_studyImageset() ?? place.get_backgroundImageset();
+        try {
+          const layer = markRaw(await this.addImageSetLayer({
+            url: iset?.get_url() ?? "",
+            mode: "preloaded",
+            name: place.get_name(),
+            goto: false,
+          }));
+          this.layerByKey[key] = layer;
+          stack.push(place);
+          this.setOpacity(key, defaults[key] ?? 0);
+        } catch (err) {
+          console.warn(`[orion] couldn't add the layer for "${place.get_name()}"`, err);
+        }
       }
+      this.stack = markRaw(stack);
+      this.stackReady = true;
     },
 
-    onGallerySelect(place: Place): void {
+    // Percent per layer for the opening set (DEFAULT_SHOWN at 100, rest 0).
+    defaultTargets(places?: Place[]): Record<string, number> {
+      const list = places ?? this.stack;
+      const shown = new Set(DEFAULT_SHOWN.map(normalizeName));
+      const out: Record<string, number> = {};
+      for (const p of list) { out[placeKey(p)] = shown.has(normalizeName(p.get_name())) ? 100 : 0; }
+      return out;
+    },
+
+    // Exactly these images at 100, everything else at 0.
+    sceneTargets(names: string[]): Record<string, number> {
+      const shown = new Set(names.map(normalizeName));
+      const out: Record<string, number> = {};
+      for (const p of this.stack) { out[placeKey(p)] = shown.has(normalizeName(p.get_name())) ? 100 : 0; }
+      return out;
+    },
+
+    // What a hidden layer comes back at: its last visible opacity, else 100.
+    restoreLevel(key: string): number {
+      return this.lastShown[key] || 100;
+    },
+
+    applyLive(key: string, frac: number): void {
+      const layer = this.layerByKey[key];
+      if (!layer) { return; }
+      this.liveOpacity[key] = frac;
+      applyImageSetLayerSetting(layer, ["opacity", frac]);
+    },
+
+    // Set a layer's opacity now (percent), slider and engine together.
+    setOpacity(key: string, pct: number): void {
+      const v = Math.round(Math.min(100, Math.max(0, pct)));
+      this.opacities[key] = v;
+      if (v > 0) { this.lastShown[key] = v; }
+      this.applyLive(key, v / 100);
+    },
+
+    // Fade layers to `targets` (percent). With slewMs, fades are anchored to
+    // the camera slew: layers going out fade early, layers coming in fade over
+    // the end of the slew and start at FADE_FLOOR so their tiles stream while
+    // the camera moves (the engine fetches nothing for an opacity-0 layer).
+    // Without it, a quick fade for panel actions. Fades still running from a
+    // superseded animation carry on to their own targets.
+    animateTo(targets: Record<string, number>, slewMs = 0): void {
+      const merged: Record<string, number> = {};
+      if (this.anim) {
+        for (const [k, f] of Object.entries(this.anim.fades)) { merged[k] = f.toPct; }
+      }
+      Object.assign(merged, targets);
+      this.cancelFade();
+
+      const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      const fades: Record<string, LayerFade> = {};
+      let total = 0;
+      for (const [key, toPct] of Object.entries(merged)) {
+        if (!this.layerByKey[key]) { continue; }
+        const from = this.liveOpacity[key] ?? 0;
+        const to = toPct / 100;
+        if (Math.abs(from - to) < 0.001) { this.setOpacity(key, toPct); continue; }
+        let t0 = 0;
+        let t1 = QUICK_FADE_MS;
+        if (slewMs > 0) {
+          if (to > from) {
+            const inMs = Math.min(4000, Math.max(800, slewMs * 0.45));
+            t0 = Math.max(0, slewMs - inMs);
+            t1 = slewMs;
+          } else {
+            t1 = Math.min(3000, Math.max(600, slewMs * 0.3));
+          }
+        }
+        let start = from;
+        if (from === 0 && to > 0) {
+          start = FADE_FLOOR;
+          this.applyLive(key, FADE_FLOOR);
+        }
+        fades[key] = { from: start, to, toPct, t0, t1 };
+        total = Math.max(total, t1);
+      }
+
+      if ((reduced && slewMs === 0) || Object.keys(fades).length === 0) {
+        for (const [key, f] of Object.entries(fades)) { this.setOpacity(key, f.toPct); }
+        return;
+      }
+
+      const anim: FadeAnim = markRaw({ start: performance.now(), total, fades });
+      this.anim = anim;
+      const smooth = (x: number) => { const c = Math.min(1, Math.max(0, x)); return c * c * (3 - 2 * c); };
+      const tick = (now: number) => {
+        if (this.anim !== anim) { return; }
+        const el = now - anim.start;
+        for (const [key, f] of Object.entries(anim.fades)) {
+          if (el >= f.t1) { this.setOpacity(key, f.toPct); continue; }
+          const v = f.from + (f.to - f.from) * smooth((el - f.t0) / (f.t1 - f.t0));
+          this.applyLive(key, v);
+          this.opacities[key] = Math.round(v * 100);
+        }
+        if (el < anim.total) {
+          this.fadeRaf = requestAnimationFrame(tick);
+        } else {
+          this.fadeRaf = 0;
+          this.anim = null;
+        }
+      };
+      this.fadeRaf = requestAnimationFrame(tick);
+    },
+
+    // A hand on a slider wins over any fade running on that layer.
+    dropFade(key: string): void {
+      if (this.anim) { delete this.anim.fades[key]; }
+    },
+
+    onPanelOpacity(key: string, pct: number): void {
+      this.dropFade(key);
+      this.setOpacity(key, pct);
+    },
+
+    toggleLayer(key: string): void {
+      this.dropFade(key);
+      const on = (this.opacities[key] ?? 0) > 0;
+      this.animateTo({ [key]: on ? 0 : this.restoreLevel(key) });
+    },
+
+    soloLayer(key: string): void {
+      const targets: Record<string, number> = {};
+      for (const p of this.stack) { targets[placeKey(p)] = 0; }
+      targets[key] = (this.opacities[key] ?? 0) > 0 ? this.opacities[key] : this.restoreLevel(key);
+      this.animateTo(targets);
+      const place = this.stack.find((p) => placeKey(p) === key);
+      if (place) { this.announce(`Showing only ${place.get_name()}`); }
+    },
+
+    applyPreset(kind: "default" | "all" | "none"): void {
+      let targets: Record<string, number>;
+      if (kind === "default") {
+        targets = this.defaultTargets();
+      } else {
+        targets = {};
+        for (const p of this.stack) { targets[placeKey(p)] = kind === "all" ? 100 : 0; }
+      }
+      this.animateTo(targets);
+      this.announce(kind === "default" ? "Starting images shown" : kind === "all" ? "All images shown" : "All images hidden");
+    },
+
+    setGroupShown(group: LayerGroup, on: boolean): void {
+      const targets: Record<string, number> = {};
+      for (const p of this.stack) {
+        if (groupForName(p.get_name()) !== group) { continue; }
+        const key = placeKey(p);
+        targets[key] = on ? this.restoreLevel(key) : 0;
+      }
+      this.animateTo(targets);
+    },
+
+    // Debug/test hook: the image layers' names in the engine's draw order
+    // (bottom first).
+    engineStackNames(): string[] {
+      const map = LayerManager.get_allMaps()["Sky"];
+      return (map?.layers ?? []).filter((l) => l instanceof ImageSetLayer).map((l) => l.get_name());
+    },
+
+    onPanelSelect(place: Place): void {
       if (this.tourActive) { this.stopTour(); }
       this.onSelectPlace(place);
     },
 
-    onSelectPlace(place: Place): void {
+    // Fly to an image. By default it is also shown (faded in at its last
+    // opacity) if it was hidden, and nothing else changes; `targets` instead
+    // fades the whole stack to a scene over the slew (tour, attract loop).
+    onSelectPlace(place: Place, targets?: Record<string, number>): void {
       if (!this.attractMode) { statsTrack("select", place.get_name()); }
-      if (this.compareActive) { this.exitCompare(); }
       this.announce(place.get_name());
 
-      const seq = ++this.selectSeq;
       this.selectedPlace = place;
       this.showDescription = true;
       this.showSurveyMenu = false;
-      this.cancelFade();
 
-      const iset = place.get_studyImageset() ?? place.get_backgroundImageset();
+      const key = placeKey(place);
       const { raRad, decRad } = this.placeCenter(place);
       const zoomDeg = place.get_zoomLevel();
       const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -1322,62 +1408,10 @@ export default defineComponent({
         this.gotoRADecZoom({ raRad, decRad, zoomDeg, instant: false, duration: slewMs / 1000 }).catch(() => undefined);
       }
       this.lastSlewMs = slewMs;
-      const slewStart = performance.now();
 
-      const prev = this.currentLayer;
-      this.addImageSetLayer({
-        url: iset?.get_url() ?? "",
-        mode: "preloaded",
-        name: place.get_name(),
-        goto: false,
-      }).then((layer) => {
-        if (seq !== this.selectSeq) {
-          this.deleteLayer(layer.id);
-          return;
-        }
-        const raw = markRaw(layer);
-        this.imageLayers.push(raw);
-        this.currentLayer = raw;
-        applyImageSetLayerSetting(raw, ["opacity", FADE_FLOOR]);
-        this.currentOpacity = Math.round(FADE_FLOOR * 100);
-        this.crossfadeOnSlew(prev, raw, slewStart, slewMs, seq);
-      }).catch((err) => {
-        console.warn("onSelectPlace: failed to add image layer", err);
-      });
-    },
-
-    crossfadeOnSlew(from: ImageSetLayer | null, to: ImageSetLayer, slewStart: number, slewMs: number, seq: number): void {
-      this.cancelFade();
-      const smooth = (x: number) => { const c = Math.min(1, Math.max(0, x)); return c * c * (3 - 2 * c); };
-      const outMs = Math.min(3000, Math.max(600, slewMs * 0.3));
-      const inMs = Math.min(4000, Math.max(800, slewMs * 0.45));
-      const inStart = Math.max(0, slewMs - inMs);
-
-      const tick = (now: number) => {
-        if (seq !== this.selectSeq) { this.fadeRaf = 0; return; }
-        const el = now - slewStart;
-        const oldFrac = from ? 1 - smooth(el / outMs) : 0;
-        if (from) { applyImageSetLayerSetting(from, ["opacity", oldFrac]); }
-        const newFrac = FADE_FLOOR + smooth((el - inStart) / inMs) * (1 - FADE_FLOOR);
-        applyImageSetLayerSetting(to, ["opacity", newFrac]);
-        this.currentOpacity = Math.round(Math.max(oldFrac, newFrac) * 100);
-        if (el < slewMs) {
-          this.fadeRaf = requestAnimationFrame(tick);
-        } else {
-          this.setLayerOpacity(to, 100);
-          this.fadeRaf = 0;
-          this.pruneLayers();
-        }
-      };
-      this.fadeRaf = requestAnimationFrame(tick);
-    },
-
-    pruneLayers(): void {
-      this.imageLayers = this.imageLayers.filter((layer) => {
-        if (layer === this.currentLayer) { return true; }
-        this.deleteLayer(layer.id);
-        return false;
-      });
+      const scene = targets
+        ?? ((this.opacities[key] ?? 0) === 0 ? { [key]: this.restoreLevel(key) } : {});
+      this.animateTo(scene, slewMs);
     },
 
     cancelFade(): void {
@@ -1385,6 +1419,7 @@ export default defineComponent({
         cancelAnimationFrame(this.fadeRaf);
         this.fadeRaf = 0;
       }
+      this.anim = null;
     },
 
     // ── Menus, intro, keyboard ─────────────────────────────────────────────
@@ -1431,7 +1466,7 @@ export default defineComponent({
       }
     },
     stepImage(delta: 1 | -1): void {
-      const list = this.visibleOrder;
+      const list = this.panelPlaces;
       if (list.length === 0) { return; }
       const key = this.selectedKey;
       const idx = key ? list.findIndex((p) => placeKey(p) === key) : -1;
@@ -1458,7 +1493,6 @@ export default defineComponent({
       else if (this.isMenuOpen) { this.isMenuOpen = false; }
       else if (this.showSurveyMenu) { this.showSurveyMenu = false; }
       else if (this.selectedMarker) { this.closeMarkerCard(); }
-      else if (this.compareActive) { this.exitCompare(); }
       else if (this.tourActive) { this.stopTour(); }
     },
     onGlobalPointerdown(ev: PointerEvent): void {
@@ -1488,10 +1522,6 @@ export default defineComponent({
     selectSurvey(name: string): void {
       statsTrack("survey");
       this.curBackgroundImagesetName = name;
-    },
-    toggleCrossfade(): void {
-      this.showCrossfade = !this.showCrossfade;
-      this.isMenuOpen = false;
     },
     toggleFullscreen(): void {
       if (!document.fullscreenElement) {
@@ -1547,72 +1577,21 @@ export default defineComponent({
       if (!stop) { return; }
       this.closeMarkerCard();
       this.showDescription = true;
-      this.onSelectPlace(stop.place);
+      this.onSelectPlace(stop.place, this.sceneTargets(stop.show));
       this.announce(`Tour stop ${this.tourIdx + 1} of ${this.tourPlaces.length}: ${stop.place.get_name()}`);
     },
     stopTour(): void {
       this.tourActive = false;
     },
 
-    // ── Compare ────────────────────────────────────────────────────────────
-    startCompare(place?: Place): void {
-      const target = place ?? this.compareCandidates[0];
-      if (!target) { return; }
-      statsTrack("compare");
-      this.compareActive = true;
-      this.setCompareTarget(target);
-    },
-    setCompareTarget(place: Place): void {
-      const seq = ++this.compareSeq;
-      this.removeCompareLayer();
-      this.comparePlace = place;
-      const iset = place.get_studyImageset() ?? place.get_backgroundImageset();
-      this.addImageSetLayer({
-        url: iset?.get_url() ?? "",
-        mode: "preloaded",
-        name: `${place.get_name()} (compare)`,
-        goto: false,
-      }).then((layer) => {
-        if (seq !== this.compareSeq || !this.compareActive) { this.deleteLayer(layer.id); return; }
-        this.compareLayer = markRaw(layer);
-        applyImageSetLayerSetting(this.compareLayer, ["opacity", this.compareOpacity / 100]);
-      }).catch((err) => {
-        console.warn("compare: failed to add layer", err);
-      });
-    },
-    onCompareSelect(ev: Event): void {
-      const key = (ev.target as HTMLSelectElement).value;
-      const place = this.compareCandidates.find((p) => placeKey(p) === key);
-      if (place) { this.setCompareTarget(place); }
-    },
-    removeCompareLayer(): void {
-      if (this.compareLayer) {
-        this.deleteLayer(this.compareLayer.id);
-        this.compareLayer = null;
-      }
-    },
-    exitCompare(): void {
-      this.compareSeq++;
-      this.compareActive = false;
-      this.comparePlace = null;
-      this.removeCompareLayer();
-    },
-    swapCompare(): void {
-      const other = this.comparePlace;
-      if (!other) { return; }
-      this.exitCompare();
-      this.onSelectPlace(other);
-    },
-
     // ── Kiosk attract loop ─────────────────────────────────────────────────
     enterAttract(): void {
       statsSessionEnd(this.kioskIdleWatcher?.lastActivityTs() ?? Date.now());
       this.stopTour();
-      if (this.compareActive) { this.exitCompare(); }
       this.resetKioskView();
       this.attractTimer = window.setTimeout(() => {
         this.attractMode = true;
-        this.attractOrder = shuffled(this.galleryPlaces);
+        this.attractOrder = shuffled(this.stack);
         this.attractIdx = 0;
         this.attractNext();
       }, 3000);
@@ -1626,12 +1605,14 @@ export default defineComponent({
       this.setBackgroundImageByName(this.bgName);
       this.showProplyds = true;
       this.showJumbos = true;
+      this.animateTo(this.defaultTargets());
     },
+    // Each attract step is the opening set plus the image it flies to.
     attractNext(): void {
       if (!this.attractMode || this.attractOrder.length === 0) { return; }
       const place = this.attractOrder[this.attractIdx % this.attractOrder.length];
       this.attractIdx += 1;
-      this.onSelectPlace(place);
+      this.onSelectPlace(place, { ...this.defaultTargets(), [placeKey(place)]: 100 });
       const stepMs = (this.lastSlewMs || KIOSK_ATTRACT_FALLBACK_STEP_MS) + KIOSK_ATTRACT_DWELL_MS;
       this.attractTimer = window.setTimeout(() => this.attractNext(), stepMs);
     },
@@ -1818,7 +1799,7 @@ export default defineComponent({
   cursor: pointer;
 }
 
-/* Action buttons inside the description panel (View in 2D, Compare, Share). */
+/* Action buttons inside the description panel (Share). */
 .desc-actions {
   display: flex;
   flex-wrap: wrap;
@@ -1948,7 +1929,7 @@ export default defineComponent({
   }
 }
 
-/* Gallery */
+/* Layer panel */
 .gallery-wrap {
   position: absolute;
   top: 1rem;
@@ -1957,7 +1938,7 @@ export default defineComponent({
 }
 
 /* Kiosk: the gallery becomes an edge-to-edge strip along the top (the
-   ImageGallery component flips to a horizontal row via its kiosk prop). */
+   LayerPanel component flips to a horizontal row via its kiosk prop). */
 .kiosk .gallery-wrap {
   top: 0;
   left: 0;
@@ -2234,7 +2215,7 @@ export default defineComponent({
 
 /* Description panel */
 /* Bottom dock (see layoutDock): one flex column for the survey menu or the
-   description panel, then the opacity or compare bar. Children shrink rather
+   marker card or description panel. Children shrink rather
    than overlap; the empty part of the dock lets clicks through to the sky. */
 .bottom-dock {
   position: absolute;
@@ -2429,57 +2410,6 @@ export default defineComponent({
   }
 }
 
-/* Compare bar (audit J9): sits where the crossfade bar does. */
-.compare-bar {
-  flex: none;
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 0.5rem 0.6rem;
-  width: min(52rem, 100%);
-  background: rgba(4, 6, 24, 0.88);
-  backdrop-filter: blur(6px);
-  border: 1px solid var(--accent-color2);
-  border-radius: 999px;
-  padding: 0.35rem 0.6rem 0.35rem 1rem;
-  pointer-events: auto;
-}
-.compare-name {
-  flex: 0 1 12rem;
-  min-width: 0;
-  color: #fff;
-  font-size: 0.8rem;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-.compare-select {
-  flex: 1 1 10rem;
-  min-width: 0;
-  padding: 0.25rem 0.4rem;
-  border-radius: 6px;
-  border: 1px solid rgba(255, 255, 255, 0.25);
-  background: rgba(4, 6, 24, 0.95);
-  color: #fff;
-  font: inherit;
-  font-size: 0.8rem;
-}
-.compare-icon-btn {
-  flex: 0 0 auto;
-  width: 2rem;
-  height: 2rem;
-  border-radius: 50%;
-  border: 1px solid rgba(255, 255, 255, 0.25);
-  background: none;
-  color: var(--accent-color2);
-  cursor: pointer;
-
-  &:hover {
-    color: #fff;
-    border-color: var(--accent-color2);
-  }
-}
-
 /* Kiosk staff warning (audit J2): small, bottom-right, unmissable for staff. */
 .kiosk-staff-warning {
   position: absolute;
@@ -2493,33 +2423,6 @@ export default defineComponent({
   color: #ffd9b8;
   font-size: 0.8rem;
   pointer-events: none;
-}
-
-/* Crossfade slider */
-.crossfade-bar {
-  flex: none;
-  display: flex;
-  align-items: center;
-  gap: 0.6rem;
-  width: min(36rem, 100%);
-  background: rgba(4, 6, 24, 0.82);
-  backdrop-filter: blur(6px);
-  border: 1px solid var(--accent-color);
-  border-radius: 999px;
-  padding: 0.4rem 1rem;
-  pointer-events: auto;
-}
-
-.crossfade-text {
-  color: var(--accent-color2);
-  font-size: 0.82rem;
-  white-space: nowrap;
-}
-
-.opacity-range {
-  flex: 1;
-  accent-color: var(--accent-color);
-  cursor: pointer;
 }
 
 /* Bottom-left logos */
@@ -2630,12 +2533,12 @@ export default defineComponent({
     top: 0.5rem;
     right: 0.5rem;
   }
-  /* Leave the right-hand gallery (8rem) its column; the marker toggles wrap
-     onto their own rows rather than slide under it. */
+  /* Leave the right-hand layer panel (11rem) its column; the marker toggles
+     wrap onto their own rows rather than slide under it. */
   .top-left-controls {
     top: 0.5rem;
     left: 0.5rem;
-    max-width: calc(100vw - 10rem);
+    max-width: calc(100vw - 13rem);
   }
   .catalog-toggles {
     flex-wrap: wrap;
@@ -2646,7 +2549,7 @@ export default defineComponent({
   }
 
   /* Keep the gallery on top (z 11) but shrink the info box so it stays clear of
-     it. The gallery is also height-capped on mobile (see ImageGallery.vue) so
+     it. The layer panel is also height-capped on mobile (see LayerPanel.vue) so
      it no longer runs down over the bottom panels. */
   .description-panel {
     max-height: none;
@@ -2658,19 +2561,12 @@ export default defineComponent({
   .desc-text {
     font-size: 0.8rem;
   }
-  .compare-bar {
-    border-radius: 14px;
-    padding: 0.5rem 0.75rem;
-  }
-  .compare-name {
-    display: none;
-  }
 }
 
 /* Landscape phones and other short screens (audit J7). These are wider than
    the 600px breakpoint, so they used to get the desktop layout, where the
    gallery, the description panel and the slider overlapped. Here the gallery
-   becomes a narrow right-hand rail (ImageGallery.vue) and the panel and
+   becomes a narrow right-hand rail (LayerPanel.vue) and the panel and
    sliders sit to its left. */
 @media (max-height: 500px) and (orientation: landscape) {
   .top-left-controls {

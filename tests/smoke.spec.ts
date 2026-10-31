@@ -28,29 +28,78 @@ function collectErrors(page: Page): string[] {
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const app = (page: Page) => page.evaluate(() => (window as any).orionApp && true);
 
-test("boots on the 2023 start image with a single layer (O2)", async ({ page }) => {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type OrionApp = any;
+
+// Engine opacity (0–1) of each layer, by Place name.
+const engineOpacities = (page: Page) => page.evaluate(() => {
+  const a = (window as unknown as { orionApp: OrionApp }).orionApp;
+  const out: Record<string, number> = {};
+  for (const [key, layer] of Object.entries(a.layerByKey)) {
+    out[key.split("::")[0]] = Math.round((layer as OrionApp).get_opacity() * 100) / 100;
+  }
+  return out;
+});
+
+const shownNames = async (page: Page) =>
+  Object.entries(await engineOpacities(page)).filter(([, v]) => v > 0).map(([k]) => k).sort();
+
+const OPENING_SET = ["JWST - NIRCam Short-wavelength", "Matt Harbison - HA-LRGB", "VISTA - Infrared"];
+
+test("boots with all eleven layers on the sky, stacked widest first, opening set shown", async ({ page }) => {
   const errors = collectErrors(page);
   await page.goto("./?debug=1");
   await waitForApp(page);
   await expect(page.getByRole("dialog", { name: /Orion Nebula/ })).toBeVisible();
-  await expect(page.locator(".gallery-item")).toHaveCount(places.length);
+  await expect(page.locator(".layer-row")).toHaveCount(places.length);
   await page.getByRole("button", { name: "Start exploring" }).click();
   await expect(page.locator(".description-panel .desc-title")).toHaveText("JWST - NIRCam Short-wavelength");
   await page.waitForTimeout(7000);
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const layers = await page.evaluate(() => (window as any).orionApp.imageLayers.length);
-  expect(layers).toBe(1);
+  // Widest at the bottom, by footprint. This is the 2023 order (reverse WTML)
+  // except that Spitzer (2.7°) now sits above the wider HAWK-I (3.8°).
+  const names = await page.evaluate(() => (window as unknown as { orionApp: OrionApp }).orionApp.engineStackNames());
+  expect(names).toEqual(places.slice().sort((a, b) => b.zoom - a.zoom).map((p) => p.place));
+  // The panel lists the top of the stack first.
+  await expect(page.locator(".layer-name").first()).toHaveText("JWST - MIRI");
+  expect(await shownNames(page)).toEqual(OPENING_SET);
+  await expect(page.locator(".panel-count")).toHaveText(`3/${places.length}`);
   expect(await app(page)).toBe(true);
   expect(errors).toEqual([]);
 });
 
-test("every fixture Place is in the gallery and selectable, including VISTA (O3)", async ({ page }) => {
+test("each layer's slider, eye, Solo and the All/None/Reset actions set engine opacity", async ({ page }) => {
   const errors = collectErrors(page);
-  await start(page);
+  await start(page, "./?debug=1");
+  const hubble = page.locator(".layer-row", { hasText: "Hubble - Optical" });
+  await hubble.getByRole("slider", { name: "Hubble - Optical opacity" }).fill("40");
+  await expect.poll(async () => (await engineOpacities(page))["Hubble - Optical"]).toBe(0.4);
+  // The eye hides it and brings it back at its last opacity.
+  await hubble.getByRole("button", { name: "Show Hubble - Optical" }).click();
+  await expect.poll(async () => (await engineOpacities(page))["Hubble - Optical"]).toBe(0);
+  await hubble.getByRole("button", { name: "Show Hubble - Optical" }).click();
+  await expect.poll(async () => (await engineOpacities(page))["Hubble - Optical"]).toBe(0.4);
+  await hubble.getByRole("button", { name: "Show only Hubble - Optical" }).click();
+  await expect.poll(() => shownNames(page)).toEqual(["Hubble - Optical"]);
+  await page.getByRole("button", { name: "None", exact: true }).click();
+  await expect.poll(() => shownNames(page)).toEqual([]);
+  await page.getByRole("button", { name: "All", exact: true }).click();
+  await expect.poll(async () => (await shownNames(page)).length).toBe(places.length);
+  await page.getByRole("button", { name: "Reset", exact: true }).click();
+  await expect.poll(() => shownNames(page)).toEqual(OPENING_SET);
+  // A telescope-group chip hides the whole group.
+  await page.getByRole("button", { name: /^James Webb Space Telescope/ }).click();
+  await expect.poll(() => shownNames(page)).toEqual(["Matt Harbison - HA-LRGB", "VISTA - Infrared"]);
+  expect(errors).toEqual([]);
+});
+
+test("every fixture Place is selectable, including VISTA (O3), and selecting shows a hidden layer", async ({ page }) => {
+  const errors = collectErrors(page);
+  await start(page, "./?debug=1");
   for (const p of places) {
-    await page.locator(".gallery-item", { hasText: p.place }).first().click();
+    await page.locator(".layer-name", { hasText: p.place }).first().click();
     await expect(page.locator(".description-panel .desc-title")).toHaveText(p.place);
   }
+  await expect.poll(async () => (await engineOpacities(page))["JWST - MIRI"], { timeout: 15_000 }).toBe(1);
   expect(errors).toEqual([]);
 });
 
@@ -101,21 +150,15 @@ test("?image= deep link opens on that image", async ({ page }) => {
   await expect(page.locator(".description-panel .desc-title")).toHaveText("Hubble - Optical");
 });
 
-test("guided tour steps through stops", async ({ page }) => {
-  await page.goto("./");
+test("guided tour steps through stops, each a scene of layers", async ({ page }) => {
+  await page.goto("./?debug=1");
   await waitForApp(page);
   await page.getByRole("button", { name: /Take the guided tour/ }).click();
   await expect(page.locator(".tour-label")).toContainText("1 of 9");
+  await expect.poll(() => shownNames(page), { timeout: 15_000 }).toEqual(["Matt Harbison - HA-LRGB"]);
   await page.getByRole("button", { name: /^Next/ }).click();
   await expect(page.locator(".tour-label")).toContainText("2 of 9");
-});
-
-test("compare mode blends two telescopes' views", async ({ page }) => {
-  await start(page);
-  await page.getByRole("button", { name: /^Compare/ }).click();
-  await expect(page.locator(".compare-bar")).toBeVisible();
-  await page.keyboard.press("Escape");
-  await expect(page.locator(".compare-bar")).toHaveCount(0);
+  await expect.poll(() => shownNames(page), { timeout: 15_000 }).toEqual(["ESO/VST - Optical", "Matt Harbison - HA-LRGB"]);
 });
 
 test("kiosk mode reaches the attract loop after idling", async ({ page }) => {
@@ -150,15 +193,14 @@ for (const [w, h] of [[375, 667], [844, 390], [768, 1024]]) {
     const ctx = await browser.newContext({ viewport: { width: w, height: h }, hasTouch: true });
     const page = await ctx.newPage();
     await start(page);
-    await page.getByRole("button", { name: /^Compare/ }).click();
-    await expect(page.locator(".compare-bar")).toBeVisible();
+    await expect(page.locator(".description-panel")).toBeVisible();
     await page.waitForTimeout(400);
     const boxes = await page.evaluate(() => {
       const r = (sel: string) => {
         const b = document.querySelector(sel)?.getBoundingClientRect();
         return b ? { sel, l: b.left, r: b.right, t: b.top, b: b.bottom } : null;
       };
-      return [r(".description-panel"), r(".compare-bar"), r(".jwst-gallery"), r(".top-left-controls")].filter(Boolean);
+      return [r(".description-panel"), r(".layer-panel"), r(".top-left-controls")].filter(Boolean);
     });
     const hits: string[] = [];
     for (let i = 0; i < boxes.length; i++) {

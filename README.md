@@ -1,7 +1,8 @@
 # Orion Nebula Explorer
 
 The Orion Nebula through eleven telescopes, from backyard astrophotography to
-the James Webb Space Telescope, placed on the sky in WorldWide Telescope. Rings
+the James Webb Space Telescope, all placed on the sky at once in WorldWide
+Telescope, each with its own opacity slider in the Layers panel. Rings
 mark 150 proplyds (young stars with planet-forming disks) and diamonds mark 42
 JuMBOs (free-floating Jupiter-mass binary objects); select one for a card with
 its details and, for 23 proplyds, a Hubble close-up.
@@ -17,6 +18,32 @@ Vue 3 + Vue CLI 5, Yarn 4 (`node-modules` linker), Node 22,
 `@wwtelescope/engine` 7.40.0 with `engine-pinia` 0.16, `@cosmicds/vue-toolkit` 0.2,
 Vuetify 3 (only `<v-app>`), Font Awesome 6 SVG icons, Less. 2D only, so no engine
 patches beyond the tile-sharpness one in `src/tile-quality.ts`.
+
+## Layer stack
+
+As in the 2023 app, every Place in `public/orion.wtml` is added once at boot as
+an `ImageSetLayer` and stays on the sky; nothing is swapped or deleted.
+
+- **Order:** widest footprint (Place `ZoomLevel`) at the bottom, so each smaller,
+  sharper image draws over the wider ones. This is the 2023 order (reverse WTML)
+  except that Spitzer now sits above the wider HAWK-I.
+- **Opening set:** `DEFAULT_SHOWN` in `orion-viewer.vue` (Harbison, VISTA and the
+  NIRCam short-wavelength start image) at 100%, the rest at 0%. A 0% layer
+  costs nothing: the engine fetches no tiles for it. The panel's Reset returns
+  to this set.
+- **Layers panel** (`LayerPanel.vue`): top of the stack first; per image a
+  name (fly to it), eye toggle (remembers the last opacity), slider and Solo;
+  All / None / Reset; and one chip per telescope group that shows or hides the
+  group.
+- **Selecting** an image flies to it and, if it was hidden, fades it in over the
+  end of the slew; nothing else changes. Tour stops (`TOUR_STOPS`) are scenes:
+  each fades the stack to its own `show` list. The kiosk attract loop shows the
+  opening set plus the image it flies to.
+- This reverses audit item O2 (one image at a time with crossfades), and
+  compare mode is gone: two sliders do the same job.
+- Known look: images with black letterbox margins (e.g. the NIRCam mosaics)
+  draw those margins as dark rectangles over the layers below. The fix is
+  re-tiling them with transparent margins, not a code change.
 
 ## Commands
 
@@ -73,8 +100,10 @@ social-preview tags (the deploy workflow sets it to the GitHub Pages URL).
 
 ## Tests
 
-`tests/smoke.spec.ts`: boot with a single starting layer, every fixture Place
-selectable (including VISTA, whose apostrophe used to throw), the error card on a
-failed catalog load, all 192 markers and their toggles/URL parameter, a JuMBO
-card with its masses, deep links, the tour, compare mode, kiosk attract, the stats
-panel, an axe scan, and no overlapping panels at phone, landscape and tablet sizes.
+`tests/smoke.spec.ts`: boot with all eleven layers in footprint order and the
+opening set shown; slider, eye, Solo, All/None/Reset and group chips each setting
+engine opacity; every fixture Place selectable (including VISTA, whose apostrophe
+used to throw) and a hidden one shown on selection; the error card on a failed
+catalog load; all 192 markers and their toggles/URL parameter; a JuMBO card with
+its masses; deep links; tour stops as layer scenes; kiosk attract; the stats
+panel; an axe scan; and no overlapping panels at phone, landscape and tablet sizes.

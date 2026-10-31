@@ -1,7 +1,6 @@
 import { createApp, defineAsyncComponent } from "vue";
 
 import OrionViewer from "./orion-viewer.vue";
-import ImageGallery from "./ImageGallery.vue";
 import TransitionExpand from "./TransitionExpand.vue";
 import { tip as tipDirective } from "./tooltip";
 import { boolParam } from "./urlParams";
@@ -22,7 +21,6 @@ import {
   faChevronLeft,
   faChevronRight,
   faGear,
-  faAdjust,
   faStar,
   faInfoCircle,
   faExpand,
@@ -48,22 +46,24 @@ import {
   faCheck,
   faImage,
   faMagnifyingGlass,
-  // Menu, tour, compare and share controls (one icon per action).
+  // Menu, tour and share controls (one icon per action).
   faRoute,
   faPanorama,
   faVectorSquare,
   faBuildingColumns,
   faSatellite,
   faArrowUpRightFromSquare,
-  faTableColumns,
   faShareNodes,
-  faRightLeft,
   faTriangleExclamation,
   // Orion: layer badges and publication links.
   faNewspaper,
   faSatelliteDish,
   faMountain,
   faCamera,
+  // Layer panel controls.
+  faEye,
+  faEyeSlash,
+  faBullseye,
 } from "@fortawesome/free-solid-svg-icons";
 
 // Canonical public URL of the deployed site, set at build time
@@ -81,13 +81,14 @@ if (boolParam("kioskStats")) {
 } else {
   library.add(
     faBookOpen, faTimes, faChevronDown, faChevronUp, faChevronLeft, faChevronRight,
-    faGear, faAdjust, faStar, faInfoCircle, faExpand, faCompress, faSlidersH, faRocket, faGlobe,
+    faGear, faStar, faInfoCircle, faExpand, faCompress, faSlidersH, faRocket, faGlobe,
     faStarOfLife, faCompactDisc, faCloud, faCircleDot, faBurst, faBraille, faHurricane,
     faCircleNodes, faLayerGroup, faBolt, faTableCells, faFilter, faRing, faArrowsAlt, faCheck,
     faImage, faMagnifyingGlass,
     faRoute, faPanorama, faVectorSquare, faBuildingColumns, faSatellite, faArrowUpRightFromSquare,
-    faTableColumns, faShareNodes, faRightLeft, faTriangleExclamation,
+    faShareNodes, faTriangleExclamation,
     faNewspaper, faSatelliteDish, faMountain, faCamera,
+    faEye, faEyeSlash, faBullseye,
   );
 
   createApp(OrionViewer, {
@@ -115,7 +116,6 @@ if (boolParam("kioskStats")) {
     .component("WorldWideTelescope", WWTComponent)
     .component("font-awesome-icon", FontAwesomeIcon)
     .component("transition-expand", TransitionExpand)
-    .component("image-gallery", ImageGallery)
 
     // Mount
     .mount("#app");
