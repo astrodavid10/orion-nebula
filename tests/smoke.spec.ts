@@ -62,6 +62,10 @@ test("boots with all eleven layers on the sky, stacked widest first, opening set
   // The panel lists the top of the stack first.
   await expect(page.locator(".layer-name").first()).toHaveText("JWST - MIRI");
   expect(await shownNames(page)).toEqual(OPENING_SET);
+  // Hidden layers are disabled, not just transparent, so they fetch no tiles.
+  const enabled = await page.evaluate(() => Object.entries((window as unknown as { orionApp: OrionApp }).orionApp.layerByKey)
+    .filter(([, l]) => (l as OrionApp).get_enabled()).map(([k]) => k.split("::")[0]).sort());
+  expect(enabled).toEqual(OPENING_SET);
   await expect(page.locator(".panel-count")).toHaveText(`3/${places.length}`);
   expect(await app(page)).toBe(true);
   expect(errors).toEqual([]);

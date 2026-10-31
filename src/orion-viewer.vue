@@ -1282,6 +1282,11 @@ export default defineComponent({
       if (!layer) { return; }
       this.liveOpacity[key] = frac;
       applyImageSetLayerSetting(layer, ["opacity", frac]);
+      // LayerManager._draw gates on `enabled` only: an opacity-0 layer is still
+      // drawn and still fetches its tiles. Disable hidden layers so they cost
+      // nothing; FADE_FLOOR (> 0) re-enables a layer as it starts to fade in.
+      const enabled = frac > 0;
+      if (layer.get_enabled() !== enabled) { layer.set_enabled(enabled); }
     },
 
     // Set a layer's opacity now (percent), slider and engine together.
@@ -1295,7 +1300,7 @@ export default defineComponent({
     // Fade layers to `targets` (percent). With slewMs, fades are anchored to
     // the camera slew: layers going out fade early, layers coming in fade over
     // the end of the slew and start at FADE_FLOOR so their tiles stream while
-    // the camera moves (the engine fetches nothing for an opacity-0 layer).
+    // the camera moves (applyLive disables a layer at 0, so it fetches nothing).
     // Without it, a quick fade for panel actions. Fades still running from a
     // superseded animation carry on to their own targets.
     animateTo(targets: Record<string, number>, slewMs = 0): void {

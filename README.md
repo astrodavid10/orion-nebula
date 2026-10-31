@@ -28,9 +28,11 @@ an `ImageSetLayer` and stays on the sky; nothing is swapped or deleted.
   sharper image draws over the wider ones. This is the 2023 order (reverse WTML)
   except that Spitzer now sits above the wider HAWK-I.
 - **Opening set:** `DEFAULT_SHOWN` in `orion-viewer.vue` (Harbison, VISTA and the
-  NIRCam short-wavelength start image) at 100%, the rest at 0%. A 0% layer
-  costs nothing: the engine fetches no tiles for it. The panel's Reset returns
-  to this set.
+  NIRCam short-wavelength start image) at 100%, the rest at 0%. The panel's
+  Reset returns to this set.
+- **Hidden layers are disabled**, not just transparent: the engine's draw loop
+  checks only `enabled`, so a 0% layer would still be drawn and fetch its tiles
+  (about 150 extra tiles at startup with the opening set).
 - **Layers panel** (`LayerPanel.vue`): top of the stack first; per image a
   name (fly to it), eye toggle (remembers the last opacity), slider and Solo;
   All / None / Reset; and one chip per telescope group that shows or hides the
@@ -41,9 +43,10 @@ an `ImageSetLayer` and stays on the sky; nothing is swapped or deleted.
   opening set plus the image it flies to.
 - This reverses audit item O2 (one image at a time with crossfades), and
   compare mode is gone: two sliders do the same job.
-- Known look: images with black letterbox margins (e.g. the NIRCam mosaics)
-  draw those margins as dark rectangles over the layers below. The fix is
-  re-tiling them with transparent margins, not a code change.
+- Known look: each image's own dark sky (e.g. the NIRCam mosaics, VISTA)
+  covers the layers below it, so smaller images show as dark-edged rectangles,
+  as in 2023. It is image content, not padding: every tile set already has
+  transparent margins, so re-tiling would not change it.
 
 ## Commands
 
