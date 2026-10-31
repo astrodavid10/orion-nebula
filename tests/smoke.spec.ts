@@ -150,6 +150,22 @@ test("?image= deep link opens on that image", async ({ page }) => {
   await expect(page.locator(".description-panel .desc-title")).toHaveText("Hubble - Optical");
 });
 
+test("?layers= opens on that blend and is kept in sync with the sliders", async ({ page }) => {
+  const errors = collectErrors(page);
+  await start(page, `./?debug=1&image=${encodeURIComponent("Hubble - Optical")}&layers=hubble-optical:40,vista-infrared`);
+  await expect(page.locator(".description-panel .desc-title")).toHaveText("Hubble - Optical");
+  await page.waitForTimeout(5000);
+  expect(await shownNames(page)).toEqual(["Hubble - Optical", "VISTA - Infrared"]);
+  expect((await engineOpacities(page))["Hubble - Optical"]).toBe(0.4);
+  await page.locator(".layer-row", { hasText: "JWST - MIRI" }).getByRole("slider").fill("25");
+  await expect.poll(() => new URL(page.url()).searchParams.get("layers"))
+    .toBe("jwst-miri:25,hubble-optical:40,vista-infrared");
+  // Back to the opening set: the parameter goes away.
+  await page.getByRole("button", { name: "Reset", exact: true }).click();
+  await expect.poll(() => new URL(page.url()).searchParams.get("layers")).toBe(null);
+  expect(errors).toEqual([]);
+});
+
 test("guided tour steps through stops, each a scene of layers", async ({ page }) => {
   await page.goto("./?debug=1");
   await waitForApp(page);

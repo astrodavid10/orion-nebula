@@ -398,6 +398,7 @@ import { normalizeName, groupForName, LayerGroup } from "./layerTypes";
 import { placeKey } from "./placeKey";
 import KioskQrModal from "./KioskQrModal.vue";
 import LayerPanel from "./LayerPanel.vue";
+import { layerSlug, parseLayersParam, formatLayersParam } from "./layerParam";
 import {
   installKioskGuards, scheduleDailyReload, createIdleWatcher, IdleWatcher, isHttpUrl,
   KIOSK_RELOAD_HOUR, KIOSK_IDLE_MS, KIOSK_ATTRACT_DWELL_MS, KIOSK_ATTRACT_FALLBACK_STEP_MS,
@@ -645,6 +646,11 @@ export default defineComponent({
       bootRetryInS: 0,
 
       deepLinkImage: stringParam("image") ?? "",
+      // ?layers= at load (slug → percent); null when absent. Wins over the
+      // opening set, and the start fly-in then leaves the stack alone.
+      urlLayers: markRaw(parseLayersParam(stringParam("layers")) ?? new Map<string, number>()),
+      layersFromUrl: parseLayersParam(stringParam("layers")) !== null,
+      urlSyncTimer: 0,
       shareStatus: "",
 
       tourActive: false,
@@ -723,6 +729,7 @@ export default defineComponent({
     window.removeEventListener("resize", this.layoutDock);
     this.dockObserver?.disconnect();
     window.clearTimeout(this.positionSetTimer);
+    window.clearTimeout(this.urlSyncTimer);
     if (this.frameCallback) {
       try { engineStore().removeFrameCallback(this.frameCallback); } catch { /* engine already gone */ }
     }
@@ -752,6 +759,16 @@ export default defineComponent({
     },
     selectedKey(): string {
       return this.selectedPlace ? placeKey(this.selectedPlace) : "";
+    },
+    // ?layers= value for the current stack, or "" when it is the opening set
+    // (so a plain link stays plain).
+    layersParam(): string {
+      if (!this.stackReady) { return ""; }
+      const entries = this.panelPlaces.map((p): [string, number] => [p.get_name(), this.opacities[placeKey(p)] ?? 0]);
+      const value = formatLayersParam(entries);
+      const defaults = this.defaultTargets();
+      const isDefault = this.stack.every((p) => (this.opacities[placeKey(p)] ?? 0) === defaults[placeKey(p)]);
+      return isDefault ? "" : value;
     },
     // The panel lists the stack top first, like an image editor's layers.
     panelPlaces(): Place[] {
@@ -787,7 +804,7 @@ export default defineComponent({
     },
     homeTypeUrl(): string {
       const base = this.kioskHomeUrl
-        || urlWithoutParams("kiosk", "kioskIdle", "kioskStats", "tileq", "image", "markers", "debug");
+        || urlWithoutParams("kiosk", "kioskIdle", "kioskStats", "tileq", "image", "markers", "layers", "debug");
       try {
         const u = new URL(base);
         return (u.host + u.pathname).replace(/\/$/, "");
@@ -852,9 +869,10 @@ export default defineComponent({
     },
     homeUrl(): string {
       const base = this.kioskHomeUrl
-        || urlWithoutParams("kiosk", "kioskIdle", "kioskStats", "tileq", "image", "markers", "debug");
+        || urlWithoutParams("kiosk", "kioskIdle", "kioskStats", "tileq", "image", "markers", "layers", "debug");
       const params = new URLSearchParams();
       if (this.selectedPlace && !this.attractMode) { params.set("image", this.selectedName); }
+      if (this.layersParam && !this.attractMode) { params.set("layers", this.layersParam); }
       params.set("utm_source", "kiosk");
       return base + (base.includes("?") ? "&" : "?") + params.toString();
     },
@@ -887,6 +905,12 @@ export default defineComponent({
       this.overlay?.setVisible("proplyd", on);
       if (!on && this.selectedMarker?.kind === "proplyd") { this.closeMarkerCard(); }
       this.syncUrl();
+    },
+    // Opacities change every frame during a fade; write the URL once things
+    // settle.
+    layersParam(): void {
+      window.clearTimeout(this.urlSyncTimer);
+      this.urlSyncTimer = window.setTimeout(() => this.syncUrl(), 400);
     },
     showJumbos(on: boolean): void {
       this.overlay?.setVisible("jumbo", on);
@@ -964,6 +988,7 @@ export default defineComponent({
       if (this.selectedPlace) { params.set("image", this.selectedName); } else { params.delete("image"); }
       const markers = [this.showProplyds ? "proplyds" : "", this.showJumbos ? "jumbos" : ""].filter(Boolean);
       if (markers.length === 2) { params.delete("markers"); } else { params.set("markers", markers.join(",") || "none"); }
+      if (this.layersParam) { params.set("layers", this.layersParam); } else { params.delete("layers"); }
       const qs = params.toString();
       const url = window.location.pathname + (qs ? `?${qs}` : "") + window.location.hash;
       try { window.history.replaceState(null, "", url); } catch { /* sandboxed iframe */ }
@@ -1180,7 +1205,8 @@ export default defineComponent({
     maybeFlyToStart(): void {
       if (this.hasFlownToStart || this.showIntro || !this.startPlace) { return; }
       this.hasFlownToStart = true;
-      this.onSelectPlace(this.startPlace);
+      // A ?layers= link already says what is visible; don't add the start image.
+      this.onSelectPlace(this.startPlace, this.layersFromUrl ? {} : undefined);
     },
 
     // ── Layer stack ────────────────────────────────────────────────────────
@@ -1195,7 +1221,7 @@ export default defineComponent({
         // Ties: the later WTML entry goes lower, as in the 2023 app.
         .sort((a, b) => (b.place.get_zoomLevel() - a.place.get_zoomLevel()) || (b.i - a.i))
         .map((x) => x.place);
-      const defaults = this.defaultTargets(order);
+      const initial = this.layersFromUrl ? this.urlTargets(order) : this.defaultTargets(order);
       const stack: Place[] = [];
       for (const place of order) {
         const key = placeKey(place);
@@ -1209,7 +1235,7 @@ export default defineComponent({
           }));
           this.layerByKey[key] = layer;
           stack.push(place);
-          this.setOpacity(key, defaults[key] ?? 0);
+          this.setOpacity(key, initial[key] ?? 0);
         } catch (err) {
           console.warn(`[orion] couldn't add the layer for "${place.get_name()}"`, err);
         }
@@ -1224,6 +1250,17 @@ export default defineComponent({
       const shown = new Set(DEFAULT_SHOWN.map(normalizeName));
       const out: Record<string, number> = {};
       for (const p of list) { out[placeKey(p)] = shown.has(normalizeName(p.get_name())) ? 100 : 0; }
+      return out;
+    },
+
+    // Percent per layer from ?layers=; unknown slugs are reported and skipped.
+    urlTargets(places: Place[]): Record<string, number> {
+      const bySlug = new Map(places.map((p) => [layerSlug(p.get_name()), placeKey(p)]));
+      for (const slug of this.urlLayers.keys()) {
+        if (!bySlug.has(slug)) { console.warn(`[orion] ?layers=: no image called "${slug}"`); }
+      }
+      const out: Record<string, number> = {};
+      for (const [slug, key] of bySlug) { out[key] = this.urlLayers.get(slug) ?? 0; }
       return out;
     },
 

@@ -63,6 +63,7 @@ yarn test           # Playwright smoke suite against dist/ (build first)
 |---|---|
 | `?image=<name>` | Open on that image (e.g. `?image=Hubble - Optical`). Kept in sync while browsing; Share copies it. |
 | `?markers=proplyds`, `jumbos`, `none` | Which markers start visible (default both). Kept in sync. |
+| `?layers=<slug>[:<pct>],…` or `none` | Which layers are visible and how much, top of the stack first (e.g. `?layers=jwst-miri,hubble-optical:40`). A bare slug is 100%; unlisted layers are 0. Slugs are the image names lower-cased and hyphenated. Omitted while the stack is the opening set; kept in sync; Share copies it. |
 | `?kiosk=1` | Museum mode: no intro, external links become QR codes, idle → attract loop, nightly reload. Replaces the 2023 `Orion-Nebula-Kiosk` fork. |
 | `?kioskIdle=<s>` | Kiosk testing override. |
 | `?kioskStats=1` | Staff usage-stats panel (anonymous, local to the device). |
