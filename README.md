@@ -36,8 +36,7 @@ an `ImageSetLayer` and stays on the sky; nothing is swapped or deleted.
   (about 150 extra tiles at startup with the opening set).
 - **Layers panel** (`LayerPanel.vue`): top of the stack first; per image a
   name (fly to it), eye toggle (remembers the last opacity), slider and Solo;
-  All / None / Reset; and one chip per telescope group that shows or hides the
-  group.
+  All / None / Reset.
 - **Selecting** an image flies to it and, if it was hidden, fades it in over the
   end of the slew; nothing else changes. Tour stops (`TOUR_STOPS`) are scenes:
   each fades the stack to its own `show` list. The kiosk attract loop shows the
@@ -106,7 +105,7 @@ social-preview tags (the deploy workflow sets it to the GitHub Pages URL).
 ## Tests
 
 `tests/smoke.spec.ts`: boot with all eleven layers in footprint order and the
-opening set shown; slider, eye, Solo, All/None/Reset and group chips each setting
+opening set shown; slider, eye, Solo and All/None/Reset each setting
 engine opacity; every fixture Place selectable (including VISTA, whose apostrophe
 used to throw) and a hidden one shown on selection; the error card on a failed
 catalog load; all 192 markers and their toggles/URL parameter; a JuMBO card with

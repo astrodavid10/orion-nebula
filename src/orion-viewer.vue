@@ -130,7 +130,6 @@
           @toggle="toggleLayer"
           @solo="soloLayer"
           @preset="applyPreset"
-          @group="setGroupShown"
         ></layer-panel>
       </div>
 
@@ -394,7 +393,7 @@ import { applyImageSetLayerSetting } from "@wwtelescope/engine-helpers";
 import { MiniDSBase, BackgroundImageset } from "@cosmicds/vue-toolkit";
 // Side effect: sharper tiles (installs the RenderContext/WWTControl patch).
 import "./tile-quality";
-import { normalizeName, groupForName, LayerGroup } from "./layerTypes";
+import { normalizeName } from "./layerTypes";
 import { placeKey } from "./placeKey";
 import KioskQrModal from "./KioskQrModal.vue";
 import LayerPanel from "./LayerPanel.vue";
@@ -625,8 +624,8 @@ export default defineComponent({
       showSurveyMenu: false,
       showDescription: true,
 
-      accentColor: "#F0AB52",
-      accentColor2: "#99c8ff",
+      accentColor: "#a6dcff",
+      accentColor2: "#ff9ebd",
 
       fadeRaf: 0,
       positionSetTimer: 0,
@@ -1404,16 +1403,6 @@ export default defineComponent({
       this.announce(kind === "default" ? "Starting images shown" : kind === "all" ? "All images shown" : "All images hidden");
     },
 
-    setGroupShown(group: LayerGroup, on: boolean): void {
-      const targets: Record<string, number> = {};
-      for (const p of this.stack) {
-        if (groupForName(p.get_name()) !== group) { continue; }
-        const key = placeKey(p);
-        targets[key] = on ? this.restoreLevel(key) : 0;
-      }
-      this.animateTo(targets);
-    },
-
     // Debug/test hook: the image layers' names in the engine's draw order
     // (bottom first).
     engineStackNames(): string[] {
@@ -1836,7 +1825,7 @@ export default defineComponent({
   border: none;
   border-radius: 8px;
   background: var(--accent-color);
-  color: #140d02;
+  color: #061226;
   font: inherit;
   font-weight: 700;
   cursor: pointer;
@@ -1853,7 +1842,7 @@ export default defineComponent({
   padding: 0.35rem 0.7rem;
   border-radius: 6px;
   border: 1px solid var(--accent-color2);
-  background: rgba(153, 200, 255, 0.12);
+  background: rgba(255, 158, 189, 0.12);
   color: var(--accent-color2);
   font-size: 0.8rem;
   font-weight: 600;
@@ -1861,7 +1850,7 @@ export default defineComponent({
   transition: box-shadow 150ms ease, background 150ms ease;
 }
 .desc-view2d:hover {
-  background: rgba(153, 200, 255, 0.22);
+  background: rgba(255, 158, 189, 0.22);
   box-shadow: 0 0 8px var(--accent-color2);
 }
 
@@ -1957,7 +1946,7 @@ export default defineComponent({
   }
 
   &:hover {
-    background: rgba(240, 171, 82, 0.12);
+    background: rgba(166, 220, 255, 0.12);
     color: #fff;
   }
 
@@ -2142,7 +2131,7 @@ export default defineComponent({
 
   &.primary {
     background: var(--accent-color);
-    color: #140d02;
+    color: #061226;
   }
   &:hover {
     box-shadow: 0 0 8px var(--accent-color);
@@ -2236,7 +2225,7 @@ export default defineComponent({
   }
 
   &:hover {
-    background: rgba(240, 171, 82, 0.12);
+    background: rgba(166, 220, 255, 0.12);
     color: #fff;
   }
 
@@ -2445,7 +2434,7 @@ export default defineComponent({
 
   &.primary {
     background: var(--accent-color);
-    color: #140d02;
+    color: #061226;
   }
   &:disabled {
     opacity: 0.4;

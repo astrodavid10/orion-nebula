@@ -21,8 +21,8 @@
           :size="232"
           level="M"
           :margin="1"
-          background="#fdf8ef"
-          foreground="#140d02"
+          background="#f4f9ff"
+          foreground="#061226"
         />
       </div>
 
@@ -149,7 +149,7 @@ export default defineComponent({
 }
 
 .kiosk-qr-card {
-  background: #fdf8ef;
+  background: #f4f9ff;
   border-radius: 12px;
   padding: 16px;
   line-height: 0;

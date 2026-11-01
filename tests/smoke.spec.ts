@@ -93,9 +93,6 @@ test("each layer's slider, eye, Solo and the All/None/Reset actions set engine o
   await expect.poll(async () => (await shownNames(page)).length).toBe(places.length);
   await page.getByRole("button", { name: "Reset", exact: true }).click();
   await expect.poll(() => shownNames(page)).toEqual(OPENING_SET);
-  // A telescope-group chip hides the whole group.
-  await page.getByRole("button", { name: /^James Webb Space Telescope/ }).click();
-  await expect.poll(() => shownNames(page)).toEqual(["Matt Harbison - HA-LRGB", "VISTA - Infrared"]);
   expect(errors).toEqual([]);
 });
 

@@ -37,7 +37,7 @@ function showTip(el: HTMLElement, text: string): void {
     maxWidth: "16rem",
     background: "rgba(4, 6, 24, 0.95)",
     backdropFilter: "blur(6px)",
-    border: "1px solid #f0ab52",
+    border: "1px solid #a6dcff",
     borderRadius: "6px",
     boxShadow: "0 0 10px rgba(0, 0, 0, 0.6)",
     color: "#fff",

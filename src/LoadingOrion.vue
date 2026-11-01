@@ -190,7 +190,7 @@ export default defineComponent({
 
   .lo-line {
     fill: none;
-    stroke: rgba(153, 200, 255, 0.55);
+    stroke: rgba(166, 220, 255, 0.55);
     stroke-width: 0.2;
     stroke-linecap: round;
     stroke-dasharray: 1;

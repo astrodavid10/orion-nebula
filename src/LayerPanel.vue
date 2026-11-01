@@ -24,26 +24,6 @@
             <button type="button" class="panel-action" @click="$emit('preset', 'all')">All</button>
             <button type="button" class="panel-action" @click="$emit('preset', 'none')">None</button>
           </div>
-          <!-- One chip per telescope group: lit while any of its images is
-               showing; pressing it shows or hides the whole group. Also the
-               legend for the badges on the thumbnails. -->
-          <div class="group-chips" role="group" aria-label="Show or hide by telescope">
-            <button
-              v-for="g in groupChips"
-              :key="g.key"
-              type="button"
-              class="group-chip"
-              :class="{ on: g.on }"
-              :style="{ '--chip-color': g.color }"
-              :aria-pressed="g.on"
-              :aria-label="g.label"
-              v-tip="g.label"
-              @click="$emit('group', g.key, !g.on)"
-            >
-              <font-awesome-icon :icon="g.icon" />
-              <span class="chip-count" aria-hidden="true">{{ g.count }}</span>
-            </button>
-          </div>
         </div>
 
         <!-- Top of the stack first, like a layer list in an image editor:
@@ -127,7 +107,7 @@
 <script lang="ts">
 import { defineComponent, markRaw, PropType } from "vue";
 import { Place } from "@wwtelescope/engine";
-import { TYPE_META, GROUP_META, GROUP_ORDER, typeForName, groupForName, LayerGroup, LayerTypeMeta } from "./layerTypes";
+import { TYPE_META, typeForName, LayerTypeMeta } from "./layerTypes";
 import { croppedTileUrl } from "./thumb-crop";
 import { placeKey } from "./placeKey";
 
@@ -136,7 +116,6 @@ interface LayerItem {
   key: string;
   name: string;
   badge: LayerTypeMeta | null;
-  group: LayerGroup | null;
   thumb: string;
 }
 
@@ -164,7 +143,7 @@ export default defineComponent({
     startOpen: { type: Boolean, default: true },
   },
 
-  emits: ["select", "opacity", "toggle", "solo", "preset", "group"],
+  emits: ["select", "opacity", "toggle", "solo", "preset"],
 
   data() {
     return { expanded: this.startOpen };
@@ -180,30 +159,12 @@ export default defineComponent({
           key: placeKey(place),
           name,
           badge: t ? TYPE_META[t] : null,
-          group: groupForName(name),
           thumb: thumbUrlFor(place),
         };
       }));
     },
     shownCount(): number {
       return this.items.filter((it) => this.opacityOf(it.key) > 0).length;
-    },
-    groupChips(): { key: LayerGroup; label: string; color: string; icon: string; count: number; on: boolean }[] {
-      return GROUP_ORDER
-        .map((key) => {
-          const members = this.items.filter((it) => it.group === key);
-          const shown = members.filter((it) => this.opacityOf(it.key) > 0).length;
-          const meta = GROUP_META[key];
-          return {
-            key,
-            label: `${meta.label}: ${shown} of ${members.length} shown`,
-            color: meta.color,
-            icon: meta.icon,
-            count: members.length,
-            on: shown > 0,
-          };
-        })
-        .filter((g) => g.count > 0);
     },
   },
 
@@ -289,7 +250,7 @@ export default defineComponent({
 
 .panel-count {
   color: var(--accent-color2);
-  background: rgba(153, 200, 255, 0.12);
+  background: rgba(255, 158, 189, 0.12);
   border-radius: 999px;
   padding: 0 0.45rem;
   font-size: 0.75rem;
@@ -319,15 +280,12 @@ export default defineComponent({
   border-bottom: 1px solid rgba(255, 255, 255, 0.06);
 }
 
-.panel-actions,
-.group-chips {
+.panel-actions {
   display: flex;
   gap: 0.25rem;
 }
 
-.panel-action,
-.group-chip {
-  --chip-color: var(--accent-color2);
+.panel-action {
   display: inline-flex;
   align-items: center;
   gap: 0.25rem;
@@ -343,23 +301,13 @@ export default defineComponent({
 
   &:hover {
     color: #fff;
-    border-color: var(--chip-color);
+    border-color: var(--accent-color2);
   }
 
   &:focus-visible {
     outline: 2px solid var(--accent-color2);
     outline-offset: 1px;
   }
-}
-
-.group-chip.on {
-  color: var(--chip-color);
-  border-color: var(--chip-color);
-  background: rgba(255, 255, 255, 0.12);
-}
-
-.chip-count {
-  font-variant-numeric: tabular-nums;
 }
 
 .layer-list {
@@ -583,8 +531,7 @@ export default defineComponent({
     font-size: 0.9rem;
   }
 
-  .panel-action,
-  .group-chip {
+  .panel-action {
     font-size: 0.85rem;
     padding: 0.35rem 0.65rem;
   }
@@ -606,8 +553,7 @@ export default defineComponent({
       padding: 0.3rem;
       gap: 0.25rem;
     }
-    .panel-actions,
-    .group-chips {
+    .panel-actions {
       flex-wrap: wrap;
     }
     .layer-row {

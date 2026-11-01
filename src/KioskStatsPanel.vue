@@ -195,15 +195,15 @@ export default defineComponent({
   color: #eee;
   font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
 }
-.ks-header h1 { margin: 0; color: #F0AB52; font-size: 1.6rem; }
+.ks-header h1 { margin: 0; color: #a6dcff; font-size: 1.6rem; }
 .ks-sub { margin: 0.3rem 0 1rem; color: rgba(255, 255, 255, 0.6); font-size: 0.9rem; }
 .ks-actions { display: flex; gap: 0.6rem; flex-wrap: wrap; margin-bottom: 1.5rem; }
 .ks-btn {
   padding: 0.5rem 1rem; border-radius: 8px; cursor: pointer;
-  background: rgba(4, 6, 24, 0.82); border: 1px solid #F0AB52; color: #F0AB52;
+  background: rgba(4, 6, 24, 0.82); border: 1px solid #a6dcff; color: #a6dcff;
   font-size: 0.9rem; font-weight: 600;
 }
-.ks-btn:hover { box-shadow: 0 0 8px #F0AB52; }
+.ks-btn:hover { box-shadow: 0 0 8px #a6dcff; }
 .ks-btn-danger { border-color: #ff6b6b; color: #ff6b6b; }
 .ks-btn-danger:hover { box-shadow: 0 0 8px #ff6b6b; }
 .ks-empty { color: rgba(255, 255, 255, 0.6); font-size: 1rem; }
@@ -212,17 +212,17 @@ export default defineComponent({
 .ks-tile {
   display: flex; flex-direction: column; align-items: center;
   min-width: 6rem; padding: 0.9rem 1.2rem; border-radius: 10px;
-  background: rgba(153, 200, 255, 0.06); border: 1px solid rgba(240, 171, 82, 0.3);
+  background: rgba(166, 220, 255, 0.06); border: 1px solid rgba(166, 220, 255, 0.3);
 }
-.ks-tile-num { font-size: 1.5rem; font-weight: 700; color: #F0AB52; }
+.ks-tile-num { font-size: 1.5rem; font-weight: 700; color: #a6dcff; }
 .ks-tile-lbl { font-size: 0.75rem; color: rgba(255, 255, 255, 0.65); margin-top: 0.2rem; }
 
 .ks-section { margin-bottom: 2rem; }
-.ks-section h2 { font-size: 1rem; color: #99c8ff; margin: 0 0 0.7rem; font-weight: 600; }
+.ks-section h2 { font-size: 1rem; color: #ff9ebd; margin: 0 0 0.7rem; font-weight: 600; }
 
 .ks-hours { display: flex; align-items: flex-end; gap: 3px; height: 120px; }
 .ks-hour { flex: 1; display: flex; flex-direction: column; align-items: center; height: 100%; justify-content: flex-end; }
-.ks-hour-bar { width: 70%; min-height: 2px; background: #F0AB52; border-radius: 2px 2px 0 0; }
+.ks-hour-bar { width: 70%; min-height: 2px; background: #a6dcff; border-radius: 2px 2px 0 0; }
 .ks-hour-lbl { font-size: 0.6rem; color: rgba(255, 255, 255, 0.5); margin-top: 0.25rem; height: 0.9rem; }
 
 .ks-table-wrap { overflow-x: auto; }
@@ -236,6 +236,6 @@ export default defineComponent({
 .ks-list { margin: 0; padding-left: 1.2rem; }
 .ks-list li { display: flex; justify-content: space-between; gap: 1rem; padding: 0.25rem 0; border-bottom: 1px solid rgba(255, 255, 255, 0.07); }
 .ks-list-name { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.ks-list-count { color: #F0AB52; font-weight: 600; flex: 0 0 auto; }
+.ks-list-count { color: #a6dcff; font-weight: 600; flex: 0 0 auto; }
 .ks-none { color: rgba(255, 255, 255, 0.4); list-style: none; }
 </style>
