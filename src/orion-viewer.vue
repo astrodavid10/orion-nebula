@@ -14,7 +14,7 @@
       <transition name="fade">
         <div class="modal" id="modal-loading" v-show="isLoading || bootError">
           <div class="container" v-if="!bootError" role="status">
-            <div class="spinner"></div>
+            <loading-orion />
             <p>{{ loadingStatus }}</p>
           </div>
           <div class="boot-error" v-else role="alert">
@@ -398,6 +398,7 @@ import { normalizeName, groupForName, LayerGroup } from "./layerTypes";
 import { placeKey } from "./placeKey";
 import KioskQrModal from "./KioskQrModal.vue";
 import LayerPanel from "./LayerPanel.vue";
+import LoadingOrion from "./LoadingOrion.vue";
 import { layerSlug, parseLayersParam, formatLayersParam } from "./layerParam";
 import {
   installKioskGuards, scheduleDailyReload, createIdleWatcher, IdleWatcher, isHttpUrl,
@@ -566,7 +567,7 @@ export default defineComponent({
   extends: MiniDSBase,
   name: "OrionViewer",
 
-  components: { "kiosk-qr-modal": KioskQrModal, "layer-panel": LayerPanel },
+  components: { "kiosk-qr-modal": KioskQrModal, "layer-panel": LayerPanel, "loading-orion": LoadingOrion },
 
   props: {
     wwtNamespace: { type: String, required: true },
